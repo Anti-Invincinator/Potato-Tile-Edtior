@@ -126,3 +126,10 @@ void Player::Update(const float& dt)
 	this->hitboxComponent->Update();
 }
 
+void Player::Render(sf::RenderTarget& target)
+{
+	target.draw(this->sprite);
+
+	this->hitboxComponent->Render(target);
+}
+

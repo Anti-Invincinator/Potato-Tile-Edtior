@@ -22,6 +22,8 @@ public:
 
 	//Accessors
 	const std::string getAsString() const;
+	const sf::Vector2f& getPosition() const;
+	const bool getCollision() const;
 
 	//Functions
 	void Update();

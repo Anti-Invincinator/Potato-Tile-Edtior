@@ -9,7 +9,6 @@ class HitboxComponent;
 class MovementComponent;
 class AnimationComponent;
 
-
 class Entity
 {
 private:
@@ -35,12 +34,18 @@ public :
 	void createMovementComponent(const float maxVelocity, const float acceleration, const float deceleration);
 	void createAnimationComponent(sf::Texture& texture_sheet);
 
-	//Functions
+	//Accessors
+	virtual const sf::Vector2f& getPosition() const;
+	virtual const sf::FloatRect getGlobalBounds() const;
+
+	//Modifiers
 	virtual void setPosition(const float x, const float y);
+
+	//Functions
 	virtual void Move(const float dir_x, const float dir_y, const float& dt);
 
-	virtual void Update(const float& dt);
-	virtual void Render(sf::RenderTarget& target);
+	virtual void Update(const float& dt) = 0;
+	virtual void Render(sf::RenderTarget& target) = 0;
 };
 
 #endif // !ENTITY_H

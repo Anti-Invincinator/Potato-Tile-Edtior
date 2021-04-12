@@ -22,7 +22,6 @@ private:
 
 	sf::Font font;
 	sf::Text cursorText;
-	float cameraSpeed;
 	PauseMenu* pmenu;
 
 	std::map<std::string, gui::Button*> buttons;
@@ -33,12 +32,12 @@ private:
 
 	sf::RectangleShape selectorRect;
 
-	gui::TextureSelector* textureSelector;
+	gui::TextureSelector* textureSelector;	
 
 	sf::IntRect textureRect;
-
 	bool collision;
 	short type;
+	float cameraSpeed;
 
 	//Initializer Functions
 	void initVariables();

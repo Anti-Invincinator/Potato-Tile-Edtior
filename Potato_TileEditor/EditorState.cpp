@@ -95,6 +95,8 @@ void EditorState::initGui()
 		this->stateData->gridSize, this->tileMap->getTileTextureSheet(),
 		this->font, "TS"
 		);
+
+
 }
 
 void EditorState::initTileMap()
@@ -305,14 +307,19 @@ void EditorState::renderGui(sf::RenderTarget& target)
 	 ~CursorText
 	*/ 
 	
-	if(!this->textureSelector->getActive())
-	target.draw(this->selectorRect);
+	if (!this->textureSelector->getActive())
+	{
+		target.setView(this->view);
+		target.draw(this->selectorRect);
+	}
 		
+	target.setView(this->window->getDefaultView());
 	this->textureSelector->Render(target);
+	target.draw(this->sidebar);
 
+	target.setView(this->view);
 	target.draw(this->cursorText);
 	
-	target.draw(this->sidebar);
 }
 
 void EditorState::Render(sf::RenderTarget* target)
@@ -329,6 +336,7 @@ void EditorState::Render(sf::RenderTarget* target)
 
 	if (this->paused)   //Paused
 	{
+		target->setView(this->window->getDefaultView());
 		this->pmenu->Render(*target);
 	}
 	
