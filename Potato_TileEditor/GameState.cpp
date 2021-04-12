@@ -196,7 +196,7 @@ void GameState::Render(sf::RenderTarget* target)
 	this->renderTexture.clear();
 		
 	this->renderTexture.setView(this->view);
-	this->tileMap->Render(this->renderTexture);
+	this->tileMap->Render(this->renderTexture, this->player);
 
 	this->player->Render(this->renderTexture);
 
