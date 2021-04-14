@@ -21,9 +21,11 @@ public:
 	virtual ~Tile();
 
 	//Accessors
-	const std::string getAsString() const;
+	const bool& getCollision() const;
 	const sf::Vector2f& getPosition() const;
-	const bool getCollision() const;
+	const sf::FloatRect getGlobalBounds() const;
+	const bool intersects(const sf::FloatRect bounds) const;
+	const std::string getAsString() const;
 
 	//Functions
 	void Update();

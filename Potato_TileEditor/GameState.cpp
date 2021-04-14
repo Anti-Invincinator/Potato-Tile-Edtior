@@ -92,15 +92,15 @@ void GameState::initTileMap()
 GameState::GameState(StateData* state_data)
 	:State(state_data)
 {
+	
 	this->initDeferredRender();
 	this->initView();
 	this->initKeybinds();
 	this->initFonts();
 	this->initTextures();
 	this->initPauseMenu();
-
-	this->initPlayers();
 	this->initTileMap();
+	this->initPlayers();
 }
 
 GameState::~GameState()
@@ -162,7 +162,7 @@ void GameState::updatePausedMenuButtons()
 void GameState::updateTileMap(const float& dt)
 {
 	this->tileMap->Update();
-	this->tileMap->updateCollision(this->player);
+	this->tileMap->updateCollision(this->player, dt);
 }
 
 void GameState::Update(const float& dt)

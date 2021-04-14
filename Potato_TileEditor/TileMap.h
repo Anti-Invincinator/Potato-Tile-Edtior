@@ -43,7 +43,7 @@ public:
 	void addTile(const unsigned x, const unsigned y, const unsigned z, const sf::IntRect& texture_rect, const bool& collision, const short& type);
 	void removeTile(const unsigned x, const unsigned y, const unsigned z);
 
-	void updateCollision(Entity* entity);
+	void updateCollision(Entity* entity, const float& dt);
 
 	void Update();
 	void Render(sf::RenderTarget& target, Entity* entity = nullptr);
