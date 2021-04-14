@@ -24,10 +24,10 @@ public:
 	const bool& getCollision() const;
 	const sf::Vector2f& getPosition() const;
 	const sf::FloatRect getGlobalBounds() const;
-	const bool intersects(const sf::FloatRect bounds) const;
 	const std::string getAsString() const;
 
 	//Functions
+	const bool intersects(const sf::FloatRect bounds) const;
 	void Update();
 	void Render(sf::RenderTarget& target);
 };

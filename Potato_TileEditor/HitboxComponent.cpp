@@ -46,7 +46,7 @@ const sf::FloatRect& HitboxComponent::getNextPosition(const sf::Vector2f& veloci
 void HitboxComponent::setPosition(const sf::Vector2f& position)
 {
 	this->hitbox.setPosition(position);
-	this->hitbox.setPosition(position.x - this->offsetX, position.y - this->offsetY);
+	this->sprite.setPosition(position.x - this->offsetX, position.y - this->offsetY);
 }
 
 void HitboxComponent::setPosition(const float x, const float y)
