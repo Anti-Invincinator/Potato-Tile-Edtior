@@ -9,11 +9,18 @@ void EditorState::initVariables()
 	this->collision = false;
 	this->type = TileTypes::DEFAULT;
 	this->cameraSpeed = 100.f;
+	this->layer = 0;
 }
 
 void EditorState::initView()
 {
-	this->view.setSize(sf::Vector2f(this->stateData->gfxSettings->resolution.width, this->stateData->gfxSettings->resolution.height));
+	this->view.setSize(
+		sf::Vector2f(
+			static_cast<float>(this->stateData->gfxSettings->resolution.width),
+			static_cast<float>(this->stateData->gfxSettings->resolution.height)
+		)
+	);
+
 	this->view.setCenter(
 		static_cast<float>(this->stateData->gfxSettings->resolution.width) / 2.f ,
 		static_cast<float>(this->stateData->gfxSettings->resolution.height) / 2.f
@@ -91,7 +98,7 @@ void EditorState::initGui()
 	this->selectorRect.setTexture(this->tileMap->getTileTextureSheet());
 	this->selectorRect.setTextureRect(this->textureRect);
 
-	this->textureSelector = new gui::TextureSelector(20.f, 20.f, 500.f, 500.f, 
+	this->textureSelector = new gui::TextureSelector(20.f, 20.f, 1000.f, 500.f, 
 		this->stateData->gridSize, this->tileMap->getTileTextureSheet(),
 		this->font, "TS"
 		);
@@ -101,7 +108,7 @@ void EditorState::initGui()
 
 void EditorState::initTileMap()
 {
-	this->tileMap = new TileMap(this->stateData->gridSize, 10, 10, "Resources/Images/Tiles/TILESHEET.png");
+	this->tileMap = new TileMap(this->stateData->gridSize, 100, 100, "Resources/Images/Tiles/TILESHEET.png");
 }
 
 //Constructor/Destructor
@@ -256,7 +263,8 @@ void EditorState::updateGui(const float& dt)
 		"\n" << this->mousePosGrid.x << " " << this->mousePosGrid.y <<
 		"\n" << this->textureRect.left << " " << this->textureRect.top <<
 		"\nCollision: " << this->collision <<
-		"\nType: " << this->type;
+		"\nType: " << this->type <<
+		"\nTiles: " << this->tileMap->getLayerSize(this->mousePosGrid.x, this->mousePosGrid.y, this->layer);
 	this->cursorText.setString(ss.str());
 
 
@@ -328,7 +336,8 @@ void EditorState::Render(sf::RenderTarget* target)
 		target = this->window;
 
 	target->setView(this->view);
-	this->tileMap->Render(*target);
+	this->tileMap->Render(*target, this->mousePosGrid);
+	this->tileMap->renderDeferred(*target);
 
 	target->setView(this->window->getDefaultView());
 	this->renderButtons(*target);

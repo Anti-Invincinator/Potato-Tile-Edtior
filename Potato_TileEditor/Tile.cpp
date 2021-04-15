@@ -8,7 +8,7 @@ Tile::Tile()
 }
 
 //Constructor/Destructor
-Tile::Tile(unsigned x, unsigned y, float gridSizeF,
+Tile::Tile(int x, int y, float gridSizeF,
 	const sf::Texture& texture, const sf::IntRect& texture_rect,
 		bool collision, short type)
 {
@@ -34,6 +34,11 @@ const std::string Tile::getAsString() const
 	ss << this->shape.getTextureRect().left << " " << this->shape.getTextureRect().top << " " << this->collision << " " << this->type;
 
 	return ss.str();
+}
+
+const short& Tile::getType() const
+{
+	return this->type;
 }
 
 const sf::Vector2f& Tile::getPosition() const

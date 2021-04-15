@@ -84,7 +84,7 @@ void GameState::initPlayers()
 
 void GameState::initTileMap()
 {
-	this->tileMap = new TileMap(this->stateData->gridSize, 10, 10, "Resources/Images/Tiles/TILESHEET.png");
+	this->tileMap = new TileMap(this->stateData->gridSize, 100, 100, "Resources/Images/Tiles/TILESHEET.png");
 	this->tileMap->loadFromFile("text.pemp");
 }
 
@@ -177,9 +177,9 @@ void GameState::Update(const float& dt)
 
 		this->updatePlayerInput(dt);
 
-		this->player->Update(dt);
-
 		this->updateTileMap(dt);
+
+		this->player->Update(dt);
 	}
 	else  //Paused Update
 	{
@@ -196,9 +196,11 @@ void GameState::Render(sf::RenderTarget* target)
 	this->renderTexture.clear();
 		
 	this->renderTexture.setView(this->view);
-	this->tileMap->Render(this->renderTexture, this->player);
+	this->tileMap->Render(this->renderTexture, this->player->getGridPosition(static_cast<int>(this->stateData->gridSize)));
 
 	this->player->Render(this->renderTexture);
+
+	this->tileMap->renderDeferred(this->renderTexture);
 
 	if (this->paused) //Pause Menu Render
 	{
@@ -209,5 +211,5 @@ void GameState::Render(sf::RenderTarget* target)
 	//FINAL RENDER
 	this->renderTexture.display();
 	this->renderSprite.setTexture(this->renderTexture.getTexture());
-	target->draw(this->renderSprite);
+	target->draw(this->renderSprite); 
 }

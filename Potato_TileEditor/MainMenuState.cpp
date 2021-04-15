@@ -103,7 +103,12 @@ MainMenuState::MainMenuState(StateData* state_data)
 	this->initButtons();
 
 
-	this->background.setSize(sf::Vector2f(window->getSize().x, window->getSize().y));
+	this->background.setSize(
+		sf::Vector2f(
+			static_cast<float>(window->getSize().x),
+			static_cast<float>(window->getSize().y)
+		)
+	);
 }
 
 

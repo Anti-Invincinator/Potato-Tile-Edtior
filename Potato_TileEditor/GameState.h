@@ -8,9 +8,6 @@
 class State;
 class PauseMenu;
 class TileMap;
-class sf::View;
-class sf::Font;
-class sf::RenderTexture;
 
 class GameState : public State
 {

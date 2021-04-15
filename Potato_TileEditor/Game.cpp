@@ -118,7 +118,7 @@ void Game::updateDt()
 
 void Game::UpdateSFMLEvents()
 {
-	sf::Event event;
+	//sf::Event event;
 	while (this->window->pollEvent(this->sfEvent))
 	{
 		if (this->sfEvent.type == sf::Event::Closed)
@@ -130,15 +130,18 @@ void Game::Update()
 {
 	this->UpdateSFMLEvents();
 
-	if (!this->states.empty() && this->window->hasFocus())
+	if (!this->states.empty())
 	{
-		this->states.top()->Update(this->dt);
-
-		if (this->states.top()->getQuit())
+		if (this->window->hasFocus())
 		{
-			this->states.top()->endState();
-			delete this->states.top();
-			this->states.pop();
+			this->states.top()->Update(this->dt);
+
+			if (this->states.top()->getQuit())
+			{
+				this->states.top()->endState();
+				delete this->states.top();
+				this->states.pop();
+			}
 		}
 	}
 	//Application end
