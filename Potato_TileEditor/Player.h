@@ -20,6 +20,9 @@ public:
     Player(float x, float y, sf::Texture& texture);
     virtual ~Player();
 
+    //Accessors
+    AttributeComponent* getAttributeComponent();
+
     //Functions
     void updateAttack();
     void updateAnimation(const float& dt);

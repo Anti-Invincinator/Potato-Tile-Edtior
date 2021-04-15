@@ -77,9 +77,14 @@ void GameState::initPauseMenu()
 	this->pmenu->addButton("QUIT", 900.f, "Quit");
 }
 
-void GameState::initPlayers()
+void GameState::initPlayer()
 {
 	this->player = new Player(0, 0, this->textures["PLAYER_SHEET"]);
+}
+
+void GameState::initPlayerGUI()
+{
+	this->playerGUI = new PlayerGUI(this->player);
 }
 
 void GameState::initTileMap()
@@ -100,12 +105,15 @@ GameState::GameState(StateData* state_data)
 	this->initTextures();
 	this->initPauseMenu();
 	this->initTileMap();
-	this->initPlayers();
+
+	this->initPlayer();
+	this->initPlayerGUI();
 }
 
 GameState::~GameState()
 {
 	delete this->player;
+	delete this->playerGUI;
 	delete this->pmenu;
 	delete this->tileMap;
 }
@@ -153,6 +161,11 @@ void GameState::updatePlayerInput(const float& dt)
 	
 }
 
+void GameState::updatePlayerGUI(const float& dt)
+{
+	this->playerGUI->Update(dt);
+}
+
 void GameState::updatePausedMenuButtons()
 {
 	if (this->pmenu->isButtonPressed("QUIT"))
@@ -180,6 +193,8 @@ void GameState::Update(const float& dt)
 		this->updateTileMap(dt);
 
 		this->player->Update(dt);
+
+		this->playerGUI->Update(dt);
 	}
 	else  //Paused Update
 	{
@@ -202,14 +217,18 @@ void GameState::Render(sf::RenderTarget* target)
 
 	this->tileMap->renderDeferred(this->renderTexture);
 
+	//Render GUI
+	this->renderTexture.setView(this->renderTexture.getDefaultView());  //To Render it on Window and not on map
+	this->playerGUI->Render(this->renderTexture);
+
 	if (this->paused) //Pause Menu Render
 	{
-		this->renderTexture.setView(this->renderTexture.getDefaultView());
+		//this->renderTexture.setView(this->renderTexture.getDefaultView());
 		this->pmenu->Render(this->renderTexture);
 	}
 
 	//FINAL RENDER
 	this->renderTexture.display();
-	this->renderSprite.setTexture(this->renderTexture.getTexture());
+	//this->renderSprite.setTexture(this->renderTexture.getTexture());
 	target->draw(this->renderSprite); 
 }

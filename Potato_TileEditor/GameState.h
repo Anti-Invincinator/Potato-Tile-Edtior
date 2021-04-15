@@ -4,10 +4,13 @@
 #include "State.h"
 #include "PauseMenu.h"
 #include "TileMap.h"
+#include "PlayerGUI.h"
 
 class State;
 class PauseMenu;
 class TileMap;
+class Player;
+class PlayerGUI;
 
 class GameState : public State
 {
@@ -20,6 +23,7 @@ private :
 	PauseMenu* pmenu;
 
 	Player* player;
+	PlayerGUI* playerGUI;
 	sf::Texture texture;
 
 	TileMap* tileMap;
@@ -31,7 +35,8 @@ private :
 	void initFonts();
 	void initTextures();
 	void initPauseMenu();
-	void initPlayers();
+	void initPlayer();
+	void initPlayerGUI();
 	void initTileMap();
 
 public :
@@ -42,6 +47,7 @@ public :
 	void updateView(const float& dt);
 	void updateInput(const float& dt);
 	void updatePlayerInput(const float& dt);
+	void updatePlayerGUI(const float& dt);
 	void updatePausedMenuButtons();
 	void updateTileMap(const float& dt);
 	void Update(const float& dt);
