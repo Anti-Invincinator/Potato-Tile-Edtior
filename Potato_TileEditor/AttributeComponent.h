@@ -5,10 +5,10 @@ class AttributeComponent
 {
 public:
 	//Leveling
-	unsigned level;
-	unsigned exp;
-	unsigned expNext;
-	unsigned attributePoints;
+	int level;
+	int exp;
+	int expNext;
+	int attributePoints;
 
 
 	//Attributes
@@ -34,7 +34,7 @@ public:
 	//Functions
 	std::string debugPrint() const;
 
-	void gainExp(const unsigned exp);
+	void gainExp(const int exp);
 
 	void updateStats(const bool reset);
 	void updateLevel();
@@ -43,5 +43,3 @@ public:
 };
 
 #endif // !ATTRIBUTECOMPONENT_H
-
-

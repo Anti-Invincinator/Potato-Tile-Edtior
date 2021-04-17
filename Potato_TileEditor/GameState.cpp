@@ -64,7 +64,7 @@ void GameState::initFonts()
 
 void GameState::initTextures()
 {
-	if (!this->textures["PLAYER_SHEET"].loadFromFile("Resources/Images/Sprites/Player/PLAYER_SHEET.png"))
+	if (!this->textures["PLAYER_SHEET"].loadFromFile("Resources/Images/Sprites/Player/PLAYER_SHEET2.png"))
 	{
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_PLAYER_IDLE_TEXTURE";
 	}
@@ -72,24 +72,34 @@ void GameState::initTextures()
 
 void GameState::initPauseMenu()
 {
-	this->pmenu = new PauseMenu(*this->window, this->font);
+	const sf::VideoMode& vm = this->stateData->gfxSettings->resolution;
 
-	this->pmenu->addButton("QUIT", 900.f, "Quit");
+	this->pmenu = new PauseMenu(this->stateData->gfxSettings->resolution, this->font);
+
+	this->pmenu->addButton("QUIT", gui::p2pY(83.3f, vm), gui::p2pX(15.6f, vm), gui::p2pY(7.8f, vm), "Quit", gui::p2fontSize(vm, 80));
+}
+
+void GameState::initShaders()
+{
+	if (!this->core_shader.loadFromFile("vert_shader.vert", "frag_shader.frag"))
+	{
+		std::cout << "ERROR::GAMESTATE::COULD NOT LOAD SHADER." << "\n";
+	}
 }
 
 void GameState::initPlayer()
 {
 	this->player = new Player(0, 0, this->textures["PLAYER_SHEET"]);
 }
-
+       
 void GameState::initPlayerGUI()
 {
-	this->playerGUI = new PlayerGUI(this->player);
+	this->playerGUI = new PlayerGUI(this->player, this->stateData->gfxSettings->resolution);
 }
 
 void GameState::initTileMap()
 {
-	this->tileMap = new TileMap(this->stateData->gridSize, 100, 100, "Resources/Images/Tiles/TILESHEET.png");
+	this->tileMap = new TileMap(this->stateData->gridSize, 100, 100, "Resources/Images/Tiles/tilesheet3.png");
 	this->tileMap->loadFromFile("text.pemp");
 }
 
@@ -104,10 +114,11 @@ GameState::GameState(StateData* state_data)
 	this->initFonts();
 	this->initTextures();
 	this->initPauseMenu();
-	this->initTileMap();
+	this->initShaders();
 
 	this->initPlayer();
 	this->initPlayerGUI();
+	this->initTileMap();
 }
 
 GameState::~GameState()
@@ -122,8 +133,8 @@ GameState::~GameState()
 void GameState::updateView(const float& dt)
 {
 	this->view.setCenter(
-		std::floor(this->player->getPosition().x),
-		std::floor(this->player->getPosition().y)
+		std::floor(this->player->getPosition().x + (static_cast<float>(this->mousePosWindow.x) - static_cast<float>(this->stateData->gfxSettings->resolution.width / 2)) / 10.f),
+		std::floor(this->player->getPosition().y + (static_cast<float>(this->mousePosWindow.y) - static_cast<float>(this->stateData->gfxSettings->resolution.height / 2)) / 10.f)
 	);
 }
 
@@ -153,10 +164,16 @@ void GameState::updatePlayerInput(const float& dt)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_UP"))))
 	{
 		this->player->Move(0.f, -1.f, dt);
+
+		if (this->getKeytime())
+			this->player->gainEXP(5);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_DOWN"))))
 	{
 		this->player->Move(0.f, 1.f, dt);
+
+		if(this->getKeytime())
+		this->player->loseEXP(5);
 	}
 	
 }
@@ -211,11 +228,17 @@ void GameState::Render(sf::RenderTarget* target)
 	this->renderTexture.clear();
 		
 	this->renderTexture.setView(this->view);
-	this->tileMap->Render(this->renderTexture, this->player->getGridPosition(static_cast<int>(this->stateData->gridSize)));
+	this->tileMap->Render(
+		this->renderTexture,
+		this->player->getGridPosition(static_cast<int>(this->stateData->gridSize)),
+		&this->core_shader,
+		this->player->getCenter(),
+		false
+	);
 
-	this->player->Render(this->renderTexture);
+	this->player->Render(this->renderTexture, &this->core_shader, false);
 
-	this->tileMap->renderDeferred(this->renderTexture);
+	this->tileMap->renderDeferred(this->renderTexture, &this->core_shader, this->player->getCenter());
 
 	//Render GUI
 	this->renderTexture.setView(this->renderTexture.getDefaultView());  //To Render it on Window and not on map

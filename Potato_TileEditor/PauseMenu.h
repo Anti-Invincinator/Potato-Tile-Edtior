@@ -21,7 +21,7 @@ private:
 
 public:
 	//Constructor/Destructor
-	PauseMenu(sf::RenderWindow& window, sf::Font& font);
+	PauseMenu(sf::VideoMode& vm, sf::Font& font);
 	virtual ~PauseMenu();
 
 	//Accessor
@@ -29,11 +29,14 @@ public:
 
 	//Functions
 	const bool isButtonPressed(const std::string key);
-	void addButton(const std::string key, float y, const std::string text);
+	void addButton(const std::string key,
+		const float y, 
+		const float width,
+		const float height,
+		const std::string text,
+		const unsigned font_size);
 	void Update(const sf::Vector2i& mousePosWindow);
 	void Render(sf::RenderTarget& target);
 };
 
 #endif // !PAUSEMENU_H
-
-

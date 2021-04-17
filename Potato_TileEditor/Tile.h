@@ -8,7 +8,7 @@ class Tile
 private:
 
 protected:
-	sf::RectangleShape shape;
+	sf::Sprite shape;
 	bool collision;
 	short type;
 	
@@ -30,10 +30,7 @@ public:
 	//Functions
 	const bool intersects(const sf::FloatRect bounds) const;
 	void Update();
-	void Render(sf::RenderTarget& target);
+	void Render(sf::RenderTarget& target, sf::Shader* shader = nullptr, const sf::Vector2f playerPosition = sf::Vector2f());
 };
 
 #endif // !TILE_H
-
-
-

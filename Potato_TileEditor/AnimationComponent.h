@@ -73,9 +73,8 @@ private:
 		{
 			//Setting a minimum value	
 			if (mod_percent < 0.5f)
-			{
 				mod_percent = 0.5f;
-			}
+			
 
 			//Update Timer
 			this->done = false;
@@ -134,5 +133,3 @@ public:
 };
 
 #endif // !ANIMATIONCOMPONENT_H
-
-

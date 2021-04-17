@@ -23,5 +23,3 @@ public:
 };
 
 #endif  //!GRAPHICSSETTINGS_H
-
-

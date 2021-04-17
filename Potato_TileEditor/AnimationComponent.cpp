@@ -138,4 +138,3 @@ const bool& AnimationComponent::Play(const std::string key, const float& dt, con
 
 	return this->animations[key]->isDone();
 }
-

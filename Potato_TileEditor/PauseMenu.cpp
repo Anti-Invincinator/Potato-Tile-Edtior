@@ -2,21 +2,21 @@
 #include "PauseMenu.h"
 
 //Constructor/Destructor
-PauseMenu::PauseMenu(sf::RenderWindow& window, sf::Font& font)
+PauseMenu::PauseMenu(sf::VideoMode& vm, sf::Font& font)
 	: font(font)
 {
 	this->background.setSize(
 		sf::Vector2f(
-			static_cast<float>(window.getSize().x), 
-			static_cast<float>(window.getSize().y))
+			static_cast<float>(vm.width), 
+			static_cast<float>(vm.height))
 	);
 	this->background.setFillColor(sf::Color(20, 20, 20, 100));
 
 	//Init Container
 	this->container.setSize(
 		sf::Vector2f(
-			static_cast<float>(window.getSize().x) / 4.f,
-			static_cast<float>(window.getSize().y) - 160.f
+			static_cast<float>(vm.width) / 4.f,
+			static_cast<float>(vm.height) - gui::p2pY(14.8f, vm)
 		)
 	);
 
@@ -24,18 +24,20 @@ PauseMenu::PauseMenu(sf::RenderWindow& window, sf::Font& font)
 
 	this->container.setPosition(
 		sf::Vector2f(
-			static_cast<float>(window.getSize().x) / 2.f - this->container.getSize().x / 2.f,
-			80.f
+			static_cast<float>(vm.width) / 2.f - this->container.getSize().x / 2.f,
+			gui::p2pY(7.4f, vm)
 		)
 	);
 
 	//Init Text
 	this->menuText.setFont(font);
 	this->menuText.setFillColor(sf::Color(255, 255, 255, 200));
-	this->menuText.setCharacterSize(60);
+	this->menuText.setCharacterSize(gui::p2fontSize(vm, 50));
 	this->menuText.setString("PAUSED");
-	this->menuText.setPosition(this->container.getPosition().x + this->container.getSize().x / 2.f - this->menuText.getGlobalBounds().width / 2.f,
-		this->container.getPosition().y + 40.f);
+	this->menuText.setPosition(
+		this->container.getPosition().x + this->container.getSize().x / 2.f - this->menuText.getGlobalBounds().width / 2.f,
+		this->container.getPosition().y + gui::p2pY(4.f, vm)
+	);
 }
 
 PauseMenu::~PauseMenu()
@@ -59,15 +61,18 @@ const bool PauseMenu::isButtonPressed(const std::string key)
 	return this->buttons[key]->isPressed();
 }
 
-void PauseMenu::addButton(const std::string key, float y, const std::string text)
+void PauseMenu::addButton(const std::string key, 
+	const float y,
+	const float width,
+	const float height,
+	const std::string text,
+	const unsigned font_size)
 {
-	float width = 250.f;
-	float height = 65.f;
 	float x = this->container.getPosition().x + this->container.getSize().x / 2.f - width / 2.f;
 
 	this->buttons[key] = new gui::Button(
-		x, y, width, height,																				// posX, posY, sizeX, sizeY
-		&this->font, text, 30,																			// font, text, font size
+		x, y, width, height,																			// posX, posY, sizeX, sizeY
+		&this->font, text, font_size,																			// font, text, font size
 		sf::Color(70, 70, 70, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),			// idle, hover, pressed Text Color
 		sf::Color(170, 170, 170, 0), sf::Color(120, 120, 120, 0), sf::Color(20, 20, 20, 0)				//idle, hover, pressed Button Color  (0 in alpha to make it a transparent button)
 	);

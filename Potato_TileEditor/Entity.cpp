@@ -56,6 +56,22 @@ const sf::Vector2f& Entity::getPosition() const
 	return this->sprite.getPosition();
 }
 
+const sf::Vector2f Entity::getCenter() const
+{
+	if (this->hitboxComponent)
+		return this->hitboxComponent->getPosition() +
+		sf::Vector2f(
+			this->hitboxComponent->getGlobalBounds().width / 2.f,
+			this->hitboxComponent->getGlobalBounds().height / 2.f
+		);
+
+	return this->sprite.getPosition() +
+		sf::Vector2f(
+			this->sprite.getGlobalBounds().width / 2.f,
+			this->sprite.getGlobalBounds().height / 2.f
+		);
+}
+
 const sf::Vector2i Entity::getGridPosition(const int gridSizeI) const
 {
 	if (this->hitboxComponent)
@@ -118,14 +134,4 @@ void Entity::stopVelocityY()
 {
 	if (this->movementComponent)
 	this->movementComponent->stopVelocityY();
-}
-
-void Entity::Update(const float& dt)
-{
-
-}
-
-void Entity::Render(sf::RenderTarget& target)
-{
-
 }

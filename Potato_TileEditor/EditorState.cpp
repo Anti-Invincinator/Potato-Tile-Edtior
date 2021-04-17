@@ -69,11 +69,13 @@ void EditorState::initKeybinds()
 
 void EditorState::initPauseMenu()
 {
-   this->pmenu = new PauseMenu(*this->window, this->font);
+   const sf::VideoMode& vm = this->stateData->gfxSettings->resolution;
+   this->pmenu = new PauseMenu(this->stateData->gfxSettings->resolution, this->font);
    
-   this->pmenu->addButton("QUIT", 900.f, "Quit");
-   this->pmenu->addButton("SAVE", 300.f, "Save");
-   this->pmenu->addButton("LOAD", 500.f, "Load");
+   this->pmenu->addButton("QUIT", gui::p2pY(83.3f, vm), gui::p2pX(15.6f, vm), gui::p2pY(7.8f, vm), "Quit", gui::p2fontSize(vm, 80));
+   this->pmenu->addButton("SAVE", gui::p2pY(55.5f, vm), gui::p2pX(15.6f, vm), gui::p2pY(7.8f, vm), "Save", gui::p2fontSize(vm, 80));
+   this->pmenu->addButton("LOAD", gui::p2pY(27.7f, vm), gui::p2pX(15.6f, vm), gui::p2pY(7.8f, vm), "Load", gui::p2fontSize(vm, 80));
+  
 }
 
 void EditorState::initButtons()
@@ -98,7 +100,7 @@ void EditorState::initGui()
 	this->selectorRect.setTexture(this->tileMap->getTileTextureSheet());
 	this->selectorRect.setTextureRect(this->textureRect);
 
-	this->textureSelector = new gui::TextureSelector(20.f, 20.f, 1000.f, 500.f, 
+	this->textureSelector = new gui::TextureSelector(20.f, 20.f, 1000.f, 700.f, 
 		this->stateData->gridSize, this->tileMap->getTileTextureSheet(),
 		this->font, "TS"
 		);
@@ -108,7 +110,7 @@ void EditorState::initGui()
 
 void EditorState::initTileMap()
 {
-	this->tileMap = new TileMap(this->stateData->gridSize, 100, 100, "Resources/Images/Tiles/TILESHEET.png");
+	this->tileMap = new TileMap(this->stateData->gridSize, 100, 100, "Resources/Images/Tiles/tilesheet3.png");
 }
 
 //Constructor/Destructor
@@ -336,7 +338,7 @@ void EditorState::Render(sf::RenderTarget* target)
 		target = this->window;
 
 	target->setView(this->view);
-	this->tileMap->Render(*target, this->mousePosGrid);
+	this->tileMap->Render(*target, this->mousePosGrid, nullptr, sf::Vector2f(), true);
 	this->tileMap->renderDeferred(*target);
 
 	target->setView(this->window->getDefaultView());

@@ -69,7 +69,3 @@ public:
 };
 
 #endif // !EDITORSTATE_H
-
-
-
-

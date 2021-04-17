@@ -91,7 +91,7 @@
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="PlayerGUI.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>GUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -150,7 +150,15 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="PlayerGUI.h">
-      <Filter>Header Files</Filter>
+      <Filter>GUI</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="frag_shader.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="vert_shader.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

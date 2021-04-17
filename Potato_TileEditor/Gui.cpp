@@ -1,6 +1,48 @@
 #include "stdafx.h"
 #include "Gui.h"
 
+const float gui::p2pX(const float width_percent, const sf::VideoMode& vm)
+{
+	/*
+	* Converts a percentage value to pixels relative to the current resolution in the x-axis.
+	*
+	* @param					float perc				the percentage value.
+	* @param					sf::VideoMode& vm		the current videomode of the window (resolution).
+	*
+	* @return					float					the calculated pixel value.
+	*/
+	return std::floor(static_cast<float>(vm.width) * (width_percent / 100.f));
+}
+
+const float gui::p2pY(const float height_percent, const sf::VideoMode& vm)
+{
+	/*
+	* Converts a percentage value to pixels relative to the current resolution in the y-axis.
+	*
+	* @param					float perc						the percentage value.
+	* @param					sf::VideoMode& vm				the current videomode of the window (resolution).
+	*
+	* @return					float					the calculated pixel value.
+	*/
+	return std::floor(static_cast<float>(vm.height) * (height_percent / 100.f));
+}
+
+const unsigned gui::p2fontSize(const sf::VideoMode& vm, const unsigned font_size_modifier)
+{
+	/*
+	* Converts the character size for text using the current resolution and a constant.
+	*
+	* @param					sf::VideoMode& vm				the current videomode of the window (resolution).
+	* @param					unsigne font_size_modifier	    used to modify font size with respect to 1920 x 1080
+	*
+	* @return					unsigned						the calculated character size value.
+	*/
+	
+
+	return static_cast<unsigned>((vm.width + vm.height) / font_size_modifier);
+}
+
+
 gui::Button::Button(float x, float y, float width, float height,
 	sf::Font* font, std::string text, unsigned character_size,
 	sf::Color text_idle_color, sf::Color text_hover_color, sf::Color text_pressed_color,
@@ -254,7 +296,7 @@ gui::TextureSelector::TextureSelector(float x, float y, float width, float heigh
 	this->active = false;
 	this->gridSize = gridSize;
 	this->hidden = false;
-	float offset = 100.f;                                                     //This is done to accomodate the Texture Selector Button
+	float offset = this->gridSize;                                                     //This is done to accomodate the Texture Selector Button
 
 	this->bounds.setSize(sf::Vector2f(width, height));
 	this->bounds.setPosition(x + offset, y);
@@ -381,5 +423,3 @@ void gui::TextureSelector::Render(sf::RenderTarget& target)
 }
 
 #pragma endregion
-
-

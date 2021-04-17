@@ -35,6 +35,3 @@ public:
 };
 
 #endif // !HITBOXCOMPONENT_H
-
-
-

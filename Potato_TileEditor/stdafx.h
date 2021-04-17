@@ -26,6 +26,5 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Network.hpp>
 
+
 #endif // !HEADER_H
-
-

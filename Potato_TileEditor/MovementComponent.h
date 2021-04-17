@@ -35,7 +35,4 @@ public:
 	void Update(const float& dt);
 };
 
-
 #endif // !MOVEMENTCOMPONENT_H
-
-

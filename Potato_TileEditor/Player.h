@@ -24,14 +24,15 @@ public:
     AttributeComponent* getAttributeComponent();
 
     //Functions
+    void loseHP(const int hp);
+    void loseEXP(const int exp);
+    void gainHP(const int hp);
+    void gainEXP(const int exp);
+
     void updateAttack();
     void updateAnimation(const float& dt);
     virtual void Update(const float& dt);
-    void Render(sf::RenderTarget& target);
-
+    void Render(sf::RenderTarget& target, sf::Shader* shader = nullptr, const bool show_hitbox = false);
 };
 
 #endif // !PLAYER_H
-
-
-

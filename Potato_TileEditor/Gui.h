@@ -5,7 +5,11 @@ enum button_states {BTN_IDLE = 0, BTN_HOVER, BTN_PRESSED};
 
 namespace gui
 {
-#pragma region Button
+	//Functions
+	const float p2pX(const float width_percent, const sf::VideoMode& vm);
+	const float p2pY(const float height_percent, const sf::VideoMode& vm);
+	const unsigned p2fontSize(const sf::VideoMode& vm, const unsigned font_size_modifier = 60);
+
 	class Button
 	{
 	private:
@@ -51,9 +55,7 @@ namespace gui
 		void Update(const sf::Vector2i& mousePos);
 		void Render(sf::RenderTarget& target);
 	};
-#pragma endregion //!Button
 
-#pragma region DropDownList
 	class DropDownList
 	{
 	private:
@@ -81,7 +83,6 @@ namespace gui
 		void Update(const sf::Vector2i& mousePosWindow, const float& dt);
 		void Render(sf::RenderTarget& target);
 	};
-#pragma endregion //!DropDownList
 
 	class TextureSelector
 	{
@@ -117,7 +118,5 @@ namespace gui
 		void Render(sf::RenderTarget& target);
 	};
 }
+
 #endif // !GUI_H
-
-
-
