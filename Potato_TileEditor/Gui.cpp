@@ -381,17 +381,11 @@ void gui::TextureSelector::Update(const sf::Vector2i& mousePosWindow, const floa
 
 	if (!hidden)
 	{
+		this->active = false;
 		if (this->bounds.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePosWindow)))  //Checking if mouse is within the selection bounds
 		{
 			this->active = true;
-		}
-		else
-		{
-			this->active = false;
-		}
 
-		if (this->active)
-		{
 			this->mousePosGrid.x = (mousePosWindow.x - static_cast<unsigned>(this->bounds.getPosition().x)) / static_cast<unsigned>(this->gridSize);
 			this->mousePosGrid.y = (mousePosWindow.y - static_cast<unsigned>(this->bounds.getPosition().y)) / static_cast<unsigned>(this->gridSize);
 

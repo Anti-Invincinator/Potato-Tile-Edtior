@@ -36,8 +36,12 @@ public:
 	virtual ~TileMap();
 
 	//Accessors
+	const bool isTileEmpty(const int x, const int y, const int z) const;
 	const sf::Texture* getTileTextureSheet() const;
 	const int getLayerSize(const int x, const int y, const int layer) const;
+	const sf::Vector2i& getMaxSizeWorldGrid() const;
+	const sf::Vector2f& getMaxSizeWorldGridF() const;
+	const sf::Vector2f& getMaxSizeF() const;
 
 	//Functions
 	void saveToFile(const std::string file_name);

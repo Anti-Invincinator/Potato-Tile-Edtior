@@ -74,7 +74,6 @@ void Tile::Render(sf::RenderTarget& target, sf::Shader* shader, const sf::Vector
 
 		target.draw(this->shape, shader);
 	}
-
 	else
 		target.draw(this->shape);
 }

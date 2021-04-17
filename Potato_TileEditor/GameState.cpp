@@ -136,6 +136,27 @@ void GameState::updateView(const float& dt)
 		std::floor(this->player->getPosition().x + (static_cast<float>(this->mousePosWindow.x) - static_cast<float>(this->stateData->gfxSettings->resolution.width / 2)) / 10.f),
 		std::floor(this->player->getPosition().y + (static_cast<float>(this->mousePosWindow.y) - static_cast<float>(this->stateData->gfxSettings->resolution.height / 2)) / 10.f)
 	);
+
+	if (this->view.getCenter().x - this->view.getSize().x / 2.f < 0.f)
+	{
+		this->view.setCenter(0.f + this->view.getSize().x / 2.f, this->view.getCenter().y);
+	}
+	else if (this->view.getCenter().x + this->view.getSize().x / 2.f > this->tileMap->getMaxSizeF().x)
+	{
+		this->view.setCenter(this->tileMap->getMaxSizeF().x - this->view.getSize().x / 2.f, this->view.getCenter().y);
+	}
+
+	if (this->view.getCenter().y - this->view.getSize().y, 0.f + this->view.getSize().y / 2.f)
+	{
+		this->view.setCenter(this->view.getCenter().x, 0.f + this->view.getSize().y / 2.f);
+	}
+	else if (this->view.getCenter().y + this->view.getSize().y, this->view.getSize().y / 2.f > this->tileMap->getMaxSizeF().y)
+	{
+		this->view.setCenter(this->view.getCenter().x, this->tileMap->getMaxSizeF().y - this->view.getSize().y / 2.f);
+	}
+
+	this->viewGridPosition.x = static_cast<int>(this->view.getCenter().x) / static_cast<int>(this->stateData->gridSize);
+	this->viewGridPosition.y = static_cast<int>(this->view.getCenter().y) / static_cast<int>(this->stateData->gridSize);
 }
 
 void GameState::updateInput(const float& dt)
@@ -166,7 +187,7 @@ void GameState::updatePlayerInput(const float& dt)
 		this->player->Move(0.f, -1.f, dt);
 
 		if (this->getKeytime())
-			this->player->gainEXP(5);
+			this->player->gainExp(5);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_DOWN"))))
 	{
@@ -209,7 +230,7 @@ void GameState::Update(const float& dt)
 
 		this->updateTileMap(dt);
 
-		this->player->Update(dt);
+		this->player->Update(dt, this->mousePosView);
 
 		this->playerGUI->Update(dt);
 	}
@@ -230,7 +251,7 @@ void GameState::Render(sf::RenderTarget* target)
 	this->renderTexture.setView(this->view);
 	this->tileMap->Render(
 		this->renderTexture,
-		this->player->getGridPosition(static_cast<int>(this->stateData->gridSize)),
+		this->viewGridPosition,
 		&this->core_shader,
 		this->player->getCenter(),
 		false

@@ -11,6 +11,8 @@ class Player :
 private:
     //Variables
     bool attacking;
+    sf::Sprite weapon_sprite;
+    sf::Texture weapon_texture;
 
     //Initializer functions
     void initVariables();
@@ -27,11 +29,11 @@ public:
     void loseHP(const int hp);
     void loseEXP(const int exp);
     void gainHP(const int hp);
-    void gainEXP(const int exp);
+    void gainExp(const int exp);
 
     void updateAttack();
     void updateAnimation(const float& dt);
-    virtual void Update(const float& dt);
+    virtual void Update(const float& dt, sf::Vector2f& mouse_pos_view);
     void Render(sf::RenderTarget& target, sf::Shader* shader = nullptr, const bool show_hitbox = false);
 };
 

@@ -10,6 +10,7 @@ void EditorState::initVariables()
 	this->type = TileTypes::DEFAULT;
 	this->cameraSpeed = 100.f;
 	this->layer = 0;
+	this->tileAddLock = false;
 }
 
 void EditorState::initView()
@@ -201,7 +202,16 @@ void EditorState::updateEditorInput(const float& dt)
 		{
 			if (!this->textureSelector->getActive())  //when texture selector is active
 			{
-				this->tileMap->addTile(this->mousePosGrid.x, this->mousePosGrid.y, 0, this->textureRect, this->collision, this->type);
+				if (this->tileAddLock)
+				{
+					if(this->tileMap->isTileEmpty(this->mousePosGrid.x, this->mousePosGrid.y, 0))
+						this->tileMap->addTile(this->mousePosGrid.x, this->mousePosGrid.y, 0, this->textureRect, this->collision, this->type);
+				}
+				else
+				{
+					this->tileMap->addTile(this->mousePosGrid.x, this->mousePosGrid.y, 0, this->textureRect, this->collision, this->type);
+				}
+				
 			}
 			else
 			{
@@ -213,8 +223,8 @@ void EditorState::updateEditorInput(const float& dt)
 		else if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && this->getKeytime())
 		{
 			if (!this->sidebar.getGlobalBounds().contains(sf::Vector2f(this->mousePosWindow)))
-			if (!this->textureSelector->getActive())
-				this->tileMap->removeTile(this->mousePosGrid.x, this->mousePosGrid.y, 0);
+				if (!this->textureSelector->getActive())
+					this->tileMap->removeTile(this->mousePosGrid.x, this->mousePosGrid.y, 0);
 		}
 	}
 
@@ -233,10 +243,18 @@ void EditorState::updateEditorInput(const float& dt)
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("DECREASE_TYPE"))) && this->getKeytime())
 	{
-		if(this->type > 0)
-		--this->type;
+		if (this->type > 0)
+			--this->type;
 	}
 
+	//Set lock on/off
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("TOGGLE_TILE_LOCK"))) && this->getKeytime())
+	{
+		if (this->tileAddLock)
+			this->tileAddLock = false;
+		else
+			this->tileAddLock = true;
+	}
 }
 
 void EditorState::updateButtons()
@@ -266,10 +284,10 @@ void EditorState::updateGui(const float& dt)
 		"\n" << this->textureRect.left << " " << this->textureRect.top <<
 		"\nCollision: " << this->collision <<
 		"\nType: " << this->type <<
-		"\nTiles: " << this->tileMap->getLayerSize(this->mousePosGrid.x, this->mousePosGrid.y, this->layer);
+		"\nTiles: " << this->tileMap->getLayerSize(this->mousePosGrid.x, this->mousePosGrid.y, this->layer) <<
+		"\nTile Lock: " << this->tileAddLock;
+
 	this->cursorText.setString(ss.str());
-
-
 }
 
 void EditorState::updatePauseMenuButtons()
