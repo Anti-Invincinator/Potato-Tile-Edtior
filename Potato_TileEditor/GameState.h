@@ -5,12 +5,16 @@
 #include "PauseMenu.h"
 #include "TileMap.h"
 #include "PlayerGUI.h"
+#include "Sword.h"
+#include "Bow.h"
 
 class State;
 class PauseMenu;
 class TileMap;
 class Player;
 class PlayerGUI;
+class Sword;
+class Bow;
 
 class GameState : public State
 {
@@ -44,6 +48,7 @@ private :
 	void initTileMap();
 
 public :
+	//CONSTRUCTOR / DESTRUCTOR
 	GameState(StateData* state_data);
 	virtual ~GameState();
 

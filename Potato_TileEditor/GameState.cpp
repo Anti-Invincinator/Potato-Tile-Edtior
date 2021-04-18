@@ -89,7 +89,7 @@ void GameState::initShaders()
 
 void GameState::initPlayer()
 {
-	this->player = new Player(0, 0, this->textures["PLAYER_SHEET"]);
+	this->player = new Player(64, 64, this->textures["PLAYER_SHEET"]);
 }
        
 void GameState::initPlayerGUI()
@@ -99,15 +99,13 @@ void GameState::initPlayerGUI()
 
 void GameState::initTileMap()
 {
-	this->tileMap = new TileMap(this->stateData->gridSize, 100, 100, "Resources/Images/Tiles/tilesheet3.png");
-	this->tileMap->loadFromFile("text.pemp");
+	this->tileMap = new TileMap("text.pemp");
 }
 
-// Constructor/Destructor
+//CONSTRUCTOR / DESTRUCTOR
 GameState::GameState(StateData* state_data)
 	:State(state_data)
 {
-	
 	this->initDeferredRender();
 	this->initView();
 	this->initKeybinds();
