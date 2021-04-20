@@ -23,18 +23,10 @@ private :
 	sf::RectangleShape levelBarBack;
 
 	//EXP Bar
-	std::string expBarString;
-	sf::Text expBarText;
-	float expBarWidth;
-	sf::RectangleShape expBarBack;
-	sf::RectangleShape expBar;
+	gui::ProgressBar* expBar;
 
 	//HP Bar
-	std::string hpBarString;
-	sf::Text hpBarText;
-	float hpBarWidth;
-	sf::RectangleShape hpBarBack;
-	sf::RectangleShape hpBar;
+	gui::ProgressBar* hpBar;
 
 	//Initializer Functions
 	void initFont();

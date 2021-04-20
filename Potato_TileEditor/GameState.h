@@ -7,6 +7,7 @@
 #include "PlayerGUI.h"
 #include "Sword.h"
 #include "Bow.h"
+#include "Enemy.h"
 
 class State;
 class PauseMenu;
@@ -15,6 +16,7 @@ class Player;
 class PlayerGUI;
 class Sword;
 class Bow;
+class Enemy;
 
 class GameState : public State
 {

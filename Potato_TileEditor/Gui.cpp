@@ -417,3 +417,61 @@ void gui::TextureSelector::Render(sf::RenderTarget& target)
 }
 
 #pragma endregion
+
+gui::ProgressBar::ProgressBar(float pos_x, float pos_y, float _width, float _height, int max_value,
+	sf::Color inner_color, unsigned character_size,
+	sf::VideoMode& vm, sf::Font* font)
+{
+	float width = gui::p2pX(_width, vm);
+	float height = gui::p2pY(_height, vm);
+	float x = gui::p2pX(pos_x, vm);
+	float y = gui::p2pY(pos_y, vm);
+
+	this->maxWidth = width;
+	this->maxValue = max_value;
+
+	this->back.setSize(sf::Vector2f(this->maxWidth, height));
+	this->back.setFillColor(inner_color);
+	this->back.setOutlineThickness(1.f);
+	this->back.setOutlineColor(sf::Color::White);
+	this->back.setPosition(x, y);
+
+	this->bar.setSize(sf::Vector2f(width, height));
+	this->bar.setFillColor(sf::Color(250, 20, 20, 200));
+	this->bar.setPosition(x, y);
+
+	if (font)
+	{
+		this->text.setFont(*font);
+		this->text.setCharacterSize(gui::p2fontSize(vm, character_size));
+		this->text.setPosition(sf::Vector2f(x + gui::p2pX(0.53f, vm), y - gui::p2pY(0.5f, vm)));
+	}
+}
+
+gui::ProgressBar::~ProgressBar()
+{
+
+}
+
+//Functions
+void gui::ProgressBar::Update(const int current_value)
+{
+	float percent = static_cast<float>(current_value) / static_cast<float>(this->maxValue);
+
+	this->bar.setSize(
+		sf::Vector2f(
+			static_cast<float>(std::floor(this->maxWidth * percent)),
+			this->bar.getSize().y
+		)
+	);
+
+	this->barString = std::to_string(current_value) + " / " + std::to_string(maxValue);
+	this->text.setString(this->barString);
+}
+
+void gui::ProgressBar::Render(sf::RenderTarget& target)
+{
+	target.draw(this->bar);
+	target.draw(this->back);
+	target.draw(this->text);
+}

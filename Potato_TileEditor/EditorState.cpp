@@ -294,8 +294,10 @@ void EditorState::updatePauseMenuButtons()
 {
 	if (this->pmenu->isButtonPressed("QUIT"))
 		this->endState();
+
 	if (this->pmenu->isButtonPressed("SAVE"))
 		this->tileMap->saveToFile("text.pemp");
+
 	if (this->pmenu->isButtonPressed("LOAD"))
 		this->tileMap->loadFromFile("text.pemp");
 }
