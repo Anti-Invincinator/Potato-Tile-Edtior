@@ -50,9 +50,8 @@ public:
 	void addTile(const int x, const int y, const int z, const sf::IntRect& texture_rect, const bool& collision, const short& type);
 	void removeTile(const int x, const int y, const int z);
 
-	void updateCollision(Entity* entity, const float& dt);
+	void Update(Entity* entity, const float& dt);
 
-	void Update();
 	void Render(sf::RenderTarget& target,
 		const sf::Vector2i& gridPosition,
 		sf::Shader* shader = nullptr,

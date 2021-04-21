@@ -325,7 +325,7 @@ void TileMap::removeTile(const int x, const int y, const int z)
 	}
 }
 
-void TileMap::updateCollision(Entity* entity, const float& dt)
+void TileMap::Update(Entity* entity, const float& dt)
 {
 	//WORLD BOUNDS
 	if (entity->getPosition().x < 0.f)
@@ -381,6 +381,8 @@ void TileMap::updateCollision(Entity* entity, const float& dt)
 		{
 			for (size_t k = 0; k < this->map[x][y][this->layer].size(); k++)
 			{
+				this->map[x][y][this->layer][k]->Update();
+
 				sf::FloatRect playerBounds = entity->getGlobalBounds();
 				sf::FloatRect wallBounds = this->map[x][y][this->layer][k]->getGlobalBounds();
 				sf::FloatRect nextPositionBounds = entity->getNextPositionBounds(dt);
@@ -436,11 +438,6 @@ void TileMap::updateCollision(Entity* entity, const float& dt)
 			}
 		}
 	}
-}
-
-void TileMap::Update()
-{
-
 }
 
 void TileMap::Render(sf::RenderTarget& target, const sf::Vector2i& gridPosition, sf::Shader* shader, sf::Vector2f playerPosition, const bool show_collision)

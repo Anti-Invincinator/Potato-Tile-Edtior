@@ -40,6 +40,9 @@
     <Filter Include="Item\Ranged Weapon">
       <UniqueIdentifier>{ecfc4c9d-d5fd-46cf-89ee-ba2a6238e953}</UniqueIdentifier>
     </Filter>
+    <Filter Include="States\Editor Modes">
+      <UniqueIdentifier>{0d2c5a57-574d-419c-95f8-6d80b0748a53}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -124,7 +127,13 @@
       <Filter>Entities</Filter>
     </ClCompile>
     <ClCompile Include="EnemySpawner.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorMode.cpp">
+      <Filter>States\Editor Modes</Filter>
+    </ClCompile>
+    <ClCompile Include="DefaultEditorMode.cpp">
+      <Filter>States\Editor Modes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -207,7 +216,13 @@
       <Filter>Item\Ranged Weapon</Filter>
     </ClInclude>
     <ClInclude Include="EnemySpawner.h">
-      <Filter>Header Files</Filter>
+      <Filter>Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorMode.h">
+      <Filter>States\Editor Modes</Filter>
+    </ClInclude>
+    <ClInclude Include="DefaultEditorMode.h">
+      <Filter>States\Editor Modes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

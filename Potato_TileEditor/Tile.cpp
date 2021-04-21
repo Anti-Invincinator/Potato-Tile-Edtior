@@ -63,14 +63,15 @@ const bool Tile::intersects(const sf::FloatRect bounds) const
 
 void Tile::Update()
 {
+	
 }
 
-void Tile::Render(sf::RenderTarget& target, sf::Shader* shader, const sf::Vector2f playerPosition)
+void Tile::Render(sf::RenderTarget& target, sf::Shader* shader, const sf::Vector2f player_position)
 {
 	if (shader)
 	{
 		shader->setUniform("hasTexture", true);
-		shader->setUniform("lightPos", playerPosition);
+		shader->setUniform("lightPos", player_position);
 
 		target.draw(this->shape, shader);
 	}

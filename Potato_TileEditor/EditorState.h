@@ -5,12 +5,18 @@
 #include "Gui.h"
 #include "PauseMenu.h"
 #include "TileMap.h"
+#include "EditorMode.h"
 
 //Forward Declaration
 class State;
+class StateData;
 class Gui;
 class Pausemenu;
 class TileMap;
+class Tile;
+class EditorMode;
+
+enum EditorModes {DEFAULT_MODE = 0, ENEMY_MODE};
 
 class EditorState :
 	public State
@@ -19,39 +25,27 @@ class EditorState :
 private:
 	//Variables
 	sf::View view;
-
+	float cameraSpeed;
 	sf::Font font;
-	sf::Text cursorText;
 	PauseMenu* pmenu;
 
 	std::map<std::string, gui::Button*> buttons;
 
 	TileMap* tileMap;
 
-	sf::RectangleShape sidebar;
-
-	sf::RectangleShape selectorRect;
-
-	gui::TextureSelector* textureSelector;	
-
-	sf::IntRect textureRect;
-	bool collision;
-	short type;
-	float cameraSpeed;
-	int layer;
-	bool tileAddLock;
+	std::vector<EditorMode*> modes;
 
 	//Initializer Functions
 	void initVariables();
 	void initView();
-	void initBackground();
 	void initFonts();
-	void initText();
 	void initKeybinds();
 	void initPauseMenu();
 	void initButtons();
 	void initGui();
 	void initTileMap();
+
+	void initModes();
 
 public:
 	EditorState(StateData* state_data);
