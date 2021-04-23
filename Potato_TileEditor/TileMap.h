@@ -1,11 +1,15 @@
 #ifndef TILEMAP_H
 #define TILEMAP_H
 
-#include "Tile.h"
 #include "Entity.h"
+#include "EnemySpawnerTile.h"
+#include "RegularTile.h"
 
-class Tile;
+
 class Entity;
+class EntitySpawner;
+class RegularTile;
+class Enemy;
 
 class TileMap
 {
@@ -41,15 +45,21 @@ public:
 	const sf::Texture* getTileTextureSheet() const;
 	const int getLayerSize(const int x, const int y, const int layer) const;
 	const sf::Vector2i& getMaxSizeWorldGrid() const;
-	const sf::Vector2f& getMaxSizeWorldGridF() const;
-	const sf::Vector2f& getMaxSizeF() const;
+	const sf::Vector2f& getMaxSizeGridF() const;
+
 
 	//Functions
 	void saveToFile(const std::string file_name);
 	void loadFromFile(const std::string file_name);
 	void addTile(const int x, const int y, const int z, const sf::IntRect& texture_rect, const bool& collision, const short& type);
-	void removeTile(const int x, const int y, const int z);
+	void addTile(const int x, const int y, const int z, const sf::IntRect& texture_rect, const int enemy_type, const int enemy_amount, const int enemy_time_to_spawn, const int enemy_max_distance);
+	void removeTile(const int x, const int y, const int z, const int type = -1);
+	const bool checkType(const int x, const int y, const int type) const;
 
+
+	void updateWorldBoundsCollision(Entity* entity, const float& dt);
+	void updateTileCollision(Entity* entity, const float& dt);
+	void updateTiles(Entity* entity, const float& dt, std::vector<Enemy*>& activeEnemies);
 	void Update(Entity* entity, const float& dt);
 
 	void Render(sf::RenderTarget& target,

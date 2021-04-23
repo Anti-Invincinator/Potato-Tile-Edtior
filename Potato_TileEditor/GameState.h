@@ -7,7 +7,7 @@
 #include "PlayerGUI.h"
 #include "Sword.h"
 #include "Bow.h"
-#include "Enemy.h"
+#include "Enemies_include.h"
 
 class State;
 class PauseMenu;
@@ -16,7 +16,6 @@ class Player;
 class PlayerGUI;
 class Sword;
 class Bow;
-class Enemy;
 
 class GameState : public State
 {
@@ -36,6 +35,8 @@ private :
 	sf::Texture texture;
 
 	TileMap* tileMap;
+
+	std::vector<Enemy*> activeEnemies;
 
 	//Initializer Functions
 	void initDeferredRender();
@@ -61,6 +62,9 @@ public :
 	void updatePlayerGUI(const float& dt);
 	void updatePausedMenuButtons();
 	void updateTileMap(const float& dt);
+	void updatePlayer(const float& dt);
+	void updateEnemies(const float& dt);
+
 	void Update(const float& dt);
 	void Render(sf::RenderTarget* target = nullptr);
 };

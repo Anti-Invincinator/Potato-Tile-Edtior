@@ -66,7 +66,12 @@ void GameState::initTextures()
 {
 	if (!this->textures["PLAYER_SHEET"].loadFromFile("Resources/Images/Sprites/Player/PLAYER_SHEET2.png"))
 	{
-		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_PLAYER_IDLE_TEXTURE";
+		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_PLAYER_TEXTURE_SHEET";
+	}
+
+	if (!this->textures["RAT1_SHEET"].loadFromFile("Resources/Images/Sprites/Enemy/rat.png"))
+	{
+		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_PLAYER_TEXTURE_SHEET";
 	}
 }
 
@@ -117,6 +122,7 @@ GameState::GameState(StateData* state_data)
 	this->initPlayer();
 	this->initPlayerGUI();
 	this->initTileMap();
+
 }
 
 GameState::~GameState()
@@ -125,6 +131,11 @@ GameState::~GameState()
 	delete this->playerGUI;
 	delete this->pmenu;
 	delete this->tileMap;
+
+	for (size_t i = 0; i < this->activeEnemies.size(); i++)
+	{
+		delete this->activeEnemies[i];
+	}
 }
 
 //Functions
@@ -135,27 +146,27 @@ void GameState::updateView(const float& dt)
 		std::floor(this->player->getPosition().y + (static_cast<float>(this->mousePosWindow.y) - static_cast<float>(this->stateData->gfxSettings->resolution.height / 2)) / 10.f)
 	);
 
-	if (this->tileMap->getMaxSizeF().x >= this->view.getSize().x)
+	if (this->tileMap->getMaxSizeGridF().x >= this->view.getSize().x)
 	{
 		if (this->view.getCenter().x - this->view.getSize().x / 2.f < 0.f)
 		{
 			this->view.setCenter(0.f + this->view.getSize().x / 2.f, this->view.getCenter().y);
 		}
-		else if (this->view.getCenter().x + this->view.getSize().x / 2.f > this->tileMap->getMaxSizeF().x)
+		else if (this->view.getCenter().x + this->view.getSize().x / 2.f > this->tileMap->getMaxSizeGridF().x)
 		{
-			this->view.setCenter(this->tileMap->getMaxSizeF().x - this->view.getSize().x / 2.f, this->view.getCenter().y);
+			this->view.setCenter(this->tileMap->getMaxSizeGridF().x - this->view.getSize().x / 2.f, this->view.getCenter().y);
 		}
 	}
 
-	if (this->tileMap->getMaxSizeF().y >= this->view.getSize().y)
+	if (this->tileMap->getMaxSizeGridF().y >= this->view.getSize().y)
 	{
 		if (this->view.getCenter().y - this->view.getSize().y / 2.f < 0.f)
 		{
 			this->view.setCenter(this->view.getCenter().x, 0.f + this->view.getSize().y / 2.f);
 		}
-		else if (this->view.getCenter().y + this->view.getSize().y / 2.f > this->tileMap->getMaxSizeF().y)
+		else if (this->view.getCenter().y + this->view.getSize().y / 2.f > this->tileMap->getMaxSizeGridF().y)
 		{
-			this->view.setCenter(this->view.getCenter().x, this->tileMap->getMaxSizeF().y - this->view.getSize().y / 2.f);
+			this->view.setCenter(this->view.getCenter().x, this->tileMap->getMaxSizeGridF().y - this->view.getSize().y / 2.f);
 		}
 	}
 
@@ -189,16 +200,10 @@ void GameState::updatePlayerInput(const float& dt)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_UP"))))
 	{
 		this->player->Move(0.f, -1.f, dt);
-
-		if (this->getKeytime())
-			this->player->gainExp(5);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_DOWN"))))
 	{
 		this->player->Move(0.f, 1.f, dt);
-
-		if(this->getKeytime())
-		this->player->loseEXP(5);
 	}
 	
 }
@@ -216,7 +221,25 @@ void GameState::updatePausedMenuButtons()
 
 void GameState::updateTileMap(const float& dt)
 {
-	this->tileMap->Update(this->player, dt);
+	this->tileMap->updateWorldBoundsCollision(this->player, dt);
+	this->tileMap->updateTileCollision(this->player, dt);
+	this->tileMap->updateTiles(this->player, dt);
+
+	for (auto* i : this->activeEnemies)
+	{
+		this->tileMap->updateWorldBoundsCollision(i, dt);
+		this->tileMap->updateTileCollision(i, dt);
+	}
+}
+
+void GameState::updatePlayer(const float& dt)
+{
+}
+
+void GameState::updateEnemies(const float& dt)
+{
+
+	//this->activeEnemies.push_back(new Rat(600.f, 500.f, this->textures["RAT1_SHEET"]));
 }
 
 void GameState::Update(const float& dt)
@@ -236,6 +259,11 @@ void GameState::Update(const float& dt)
 		this->player->Update(dt, this->mousePosView);
 
 		this->playerGUI->Update(dt);
+
+		for (auto *i : this->activeEnemies)
+		{
+			i->Update(dt, this->mousePosView);
+		}
 	}
 	else  //Paused Update
 	{
@@ -260,7 +288,12 @@ void GameState::Render(sf::RenderTarget* target)
 		false
 	);
 
-	this->player->Render(this->renderTexture, &this->core_shader, false);
+	for (auto *i : this->activeEnemies)
+	{
+		i->Render(this->renderTexture, &this->core_shader, this->player->getCenter(), true);
+	}
+
+	this->player->Render(this->renderTexture, &this->core_shader, this->player->getCenter(), false);
 
 	this->tileMap->renderDeferred(this->renderTexture, &this->core_shader, this->player->getCenter());
 

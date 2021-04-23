@@ -17,11 +17,9 @@ private :
 	sf::RectangleShape sidebar;
 	sf::RectangleShape selectorRect;
 	gui::TextureSelector* textureSelector;
-
 	sf::IntRect textureRect;
 	bool collision;
 	short type;
-	float cameraSpeed;
 	int layer;
 	bool tileAddLock;
 
@@ -30,7 +28,7 @@ private :
 	void initGui();
 
 public:
-    DefaultEditorMode(StateData* state_data, TileMap* tile_map, sf::Font* font);
+    DefaultEditorMode(StateData* state_data, TileMap* tile_map, EditorStateData* editor_state_data);
     virtual ~DefaultEditorMode();
 
 	//Functions
@@ -39,7 +37,7 @@ public:
 	void Update(const float& dt);
 
 	void renderGui(sf::RenderTarget& target);
-	void Render(sf::RenderTarget* target = nullptr);
+	void Render(sf::RenderTarget& target);
 };
 
 #endif // !DEFAULTEDITORMODE_H

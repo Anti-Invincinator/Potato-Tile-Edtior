@@ -15,22 +15,25 @@ protected:
 public:
 	//Constructor/Destructor
 	Tile();
-	Tile(int x, int y, float gridSizeF,
+	Tile(short type,
+		int x, int y,
+		float gridSizeF,
 		const sf::Texture& texture, const sf::IntRect& texture_rect,
-		bool collision = false, short type = TileTypes::DEFAULT_TILE);
+		const bool collision
+		);
 	virtual ~Tile();
 
 	//Accessors
-	const bool& getCollision() const;
-	const sf::Vector2f& getPosition() const;
-	const sf::FloatRect getGlobalBounds() const;
-	const std::string getAsString() const;
+	virtual const sf::Vector2f& getPosition() const;
+	virtual const sf::FloatRect getGlobalBounds() const;
+	virtual const std::string getAsString() const = 0;
 	const short& getType() const;
+	virtual const bool& getCollision() const;
 
 	//Functions
-	const bool intersects(const sf::FloatRect bounds) const;
-	virtual void Update();
-	virtual void Render(sf::RenderTarget& target, sf::Shader* shader = nullptr, const sf::Vector2f player_position = sf::Vector2f());
+	virtual const bool intersects(const sf::FloatRect bounds) const;
+	virtual void Update() = 0;
+	virtual void Render(sf::RenderTarget& target, sf::Shader* shader = nullptr, const sf::Vector2f player_position = sf::Vector2f()) = 0;
 };
 
 #endif // !TILE_H

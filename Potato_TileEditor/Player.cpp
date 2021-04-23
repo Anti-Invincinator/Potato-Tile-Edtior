@@ -131,16 +131,16 @@ void Player::Update(const float& dt, sf::Vector2f& mouse_pos_view)
 
 }
 
-void Player::Render(sf::RenderTarget& target, sf::Shader* shader, const bool show_hitbox)
+void Player::Render(sf::RenderTarget& target, sf::Shader* shader, const sf::Vector2f light_position, const bool show_hitbox)
 {
 	if (shader)
 	{
 		shader->setUniform("hasTexture", true);
-		shader->setUniform("lightPos", this->getCenter());
+		shader->setUniform("lightPos", light_position);
 		target.draw(this->sprite, shader);
 
 		shader->setUniform("hasTexture", true);
-		shader->setUniform("lightPos", this->getCenter());
+		shader->setUniform("lightPos", light_position);
 		this->sword.Render(target, shader);
 	}
 	else

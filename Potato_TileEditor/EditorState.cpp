@@ -5,7 +5,20 @@
 //Initializer Functions
 void EditorState::initVariables()
 {
-	this->cameraSpeed = 1000.f
+	this->cameraSpeed = 1000.f;
+}
+
+void EditorState::initEditorStateData()
+{
+	this->editorStateData.view = &this->view;
+	this->editorStateData.font = &this->font;
+	this->editorStateData.keytime = &this->keytime;
+	this->editorStateData.keytimeMax = &this->keytimeMax;
+	this->editorStateData.keybinds = &this->keybinds;
+	this->editorStateData.mousePosGrid = &this->mousePosGrid;
+	this->editorStateData.mousePosScreen = &this->mousePosScreen;
+	this->editorStateData.mousePosView = &this->mousePosView;
+	this->editorStateData.mousePosWindow = &this->mousePosWindow;
 }
 
 void EditorState::initView()
@@ -73,11 +86,15 @@ void EditorState::initGui()
 
 void EditorState::initTileMap()
 {
-	this->tileMap = new TileMap(this->stateData->gridSize, 10, 10, "Resources/Images/Tiles/tilesheet3.png");
+	this->tileMap = new TileMap(this->stateData->gridSize, 100, 100, "Resources/Images/Tiles/tilesheet3.png");
 }
 
 void EditorState::initModes()
 {
+	this->modes.push_back(new DefaultEditorMode(this->stateData, this->tileMap, &this->editorStateData));
+	this->modes.push_back(new EnemyEditorMode(this->stateData, this->tileMap, &this->editorStateData));
+
+	this->activeMode = EditorModes::DEFUALT_EDITOR_MODE;  
 }
 
 //Constructor/Destructor
@@ -97,6 +114,7 @@ EditorState::EditorState(StateData* state_data)
 	:State(state_data)
 {
 	this->initVariables();
+	this->initEditorStateData();
 	this->initView();
 	this->initFonts();
 	this->initKeybinds();
@@ -165,6 +183,28 @@ void EditorState::updateEditorInput(const float& dt)
 		this->view.move(this->cameraSpeed * dt, 0.f);
 	}
 
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MODE_UP"))))
+	{
+		if (this->activeMode < this->modes.size() - 1)
+		{
+			this->activeMode++;
+		}
+		else
+		{
+			std::cout << "ERROR::EDITORSTATE::CANNOT CHANGE MODE!" << "\n";
+		}
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MODE_DOWN"))))
+	{
+		if (this->activeMode > 0)
+		{
+			this->activeMode--;
+		}
+		else
+		{
+			std::cout << "ERROR::EDITORSTATE::CANNOT CHANGE MODE!" << "\n";
+		}
+	}
 }
 
 void EditorState::updateButtons()
@@ -193,17 +233,24 @@ void EditorState::updatePauseMenuButtons()
 		this->tileMap->loadFromFile("text.pemp");
 }
 
+void EditorState::updateModes(const float& dt)
+{
+	this->modes[this->activeMode]->Update(dt);
+}
+
 void EditorState::Update(const float& dt)
 {
 	this->updateMousePositions(&this->view);
 	this->updateKeytime(dt);
 	this->updateInput(dt);
+	this->updateModes(dt);
 
 	if (!this->paused) //Unpaused 
 	{
 		this->updateButtons();
 		this->updateGui(dt);
 		this->updateEditorInput(dt);
+		
 	}
 	else   //Paused
 	{
@@ -225,6 +272,11 @@ void EditorState::renderGui(sf::RenderTarget& target)
 	
 }
 
+void EditorState::renderModes(sf::RenderTarget& target)
+{
+	this->modes[this->activeMode]->Render(target);
+}
+
 void EditorState::Render(sf::RenderTarget* target)
 {
 	if (!target)
@@ -236,7 +288,10 @@ void EditorState::Render(sf::RenderTarget* target)
 
 	target->setView(this->window->getDefaultView());
 	this->renderButtons(*target);
+
 	this->renderGui(*target);
+
+	this->renderModes(*target);
 
 	if (this->paused)   //Paused
 	{

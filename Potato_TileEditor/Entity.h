@@ -59,7 +59,7 @@ public :
 	virtual void stopVelocityY();
 
 	virtual void Update(const float& dt, sf::Vector2f& mouse_pos_view) = 0;
-	virtual void Render(sf::RenderTarget& target, sf::Shader* shader, const bool show_hitbox) = 0;
+	virtual void Render(sf::RenderTarget& target, sf::Shader* shader = nullptr, const sf::Vector2f light_position = sf::Vector2f(), const bool show_hitbox = false) = 0;
 };
 
 #endif // !ENTITY_H

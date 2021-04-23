@@ -43,6 +43,9 @@
     <Filter Include="States\Editor Modes">
       <UniqueIdentifier>{0d2c5a57-574d-419c-95f8-6d80b0748a53}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Entities\Enemies">
+      <UniqueIdentifier>{5ee902a9-d43a-4704-b7ed-d1ee60c2bcce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -123,10 +126,7 @@
     <ClCompile Include="Bow.cpp">
       <Filter>Item\Ranged Weapon</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemySpawner.cpp">
+    <ClCompile Include="EnemySpawnerTile.cpp">
       <Filter>Tile</Filter>
     </ClCompile>
     <ClCompile Include="EditorMode.cpp">
@@ -134,6 +134,18 @@
     </ClCompile>
     <ClCompile Include="DefaultEditorMode.cpp">
       <Filter>States\Editor Modes</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyEditorMode.cpp">
+      <Filter>States\Editor Modes</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Rat.cpp">
+      <Filter>Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="RegularTile.cpp">
+      <Filter>Tile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -209,13 +221,10 @@
     <ClInclude Include="SkillComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
     <ClInclude Include="Bow.h">
       <Filter>Item\Ranged Weapon</Filter>
     </ClInclude>
-    <ClInclude Include="EnemySpawner.h">
+    <ClInclude Include="EnemySpawnerTile.h">
       <Filter>Tile</Filter>
     </ClInclude>
     <ClInclude Include="EditorMode.h">
@@ -223,6 +232,24 @@
     </ClInclude>
     <ClInclude Include="DefaultEditorMode.h">
       <Filter>States\Editor Modes</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyEditorMode.h">
+      <Filter>States\Editor Modes</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorModes.h">
+      <Filter>States\Editor Modes</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Rat.h">
+      <Filter>Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemies_include.h">
+      <Filter>Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="RegularTile.h">
+      <Filter>Tile</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
