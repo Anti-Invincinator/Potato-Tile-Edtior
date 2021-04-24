@@ -1,24 +1,25 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include "Inventory.h"
 #include "Entity.h"
-#include "Sword.h"
-
-class Entity;
-class Sword;
+#include "Items.h"
 
 class Player :
     public Entity
 {
 private:
     //Variables
+    Inventory* inventory;
+
     bool attacking;
-    Sword sword;
+    Sword* sword;
 
     //Initializer functions
     void initVariables();
     void initComponents();
     void initAnimations();
+    void initInventory();
 
 public:
     Player(float x, float y, sf::Texture& texture);
@@ -26,6 +27,7 @@ public:
 
     //Accessors
     AttributeComponent* getAttributeComponent();
+    Weapon* getWeapon() const;
 
     //Functions
     void loseHP(const int hp);
@@ -33,7 +35,6 @@ public:
     void gainHP(const int hp);
     void gainExp(const int exp);
 
-    void updateAttack();
     void updateAnimation(const float& dt);
     virtual void Update(const float& dt, sf::Vector2f& mouse_pos_view);
     void Render(sf::RenderTarget& target, sf::Shader* shader = nullptr, const sf::Vector2f light_position = sf::Vector2f(), const bool show_hitbox = false);

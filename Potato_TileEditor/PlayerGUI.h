@@ -4,10 +4,6 @@
 #include "Player.h"
 #include "Gui.h"
 
-class Player;
-class sf::RectangleShape;
-class sf::Font;
-
 class PlayerGUI
 {
 private :

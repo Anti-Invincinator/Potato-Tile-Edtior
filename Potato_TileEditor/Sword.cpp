@@ -2,13 +2,9 @@
 #include "Sword.h"
 
 //CONSTRUCTOR / DESTRUCTOR
-Sword::Sword()
+Sword::Sword(unsigned value, std::string texture_file)
+	:MeleeWeapon(value, texture_file)
 {
-	if (!this->weapon_texture.loadFromFile("Resources/Images/Sprites/Player/sword.png"))
-		std::cout << "ERROR :: PLAYER :: WAS NOT ABLE TO LOAD SWORD WEAPON TEXTURE";
-
-	this->weapon_sprite.setTexture(this->weapon_texture);
-
 	this->weapon_sprite.setOrigin(
 		this->weapon_sprite.getGlobalBounds().width / 2.f,
 		this->weapon_sprite.getGlobalBounds().height /// 2.f + 10.f
@@ -17,6 +13,11 @@ Sword::Sword()
 
 Sword::~Sword()
 {
+}
+
+Sword* Sword::clone()
+{
+	return new Sword(*this);
 }
 
 //FUNCTIONS

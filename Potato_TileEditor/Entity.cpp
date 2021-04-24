@@ -149,3 +149,14 @@ void Entity::stopVelocityY()
 	if (this->movementComponent)
 	this->movementComponent->stopVelocityY();
 }
+
+//Calculations
+const float Entity::getDistance(const Entity& entity) const
+{
+	//sqrt((x2 - x1) ^ 2 + (x2 - x1) ^ 2 )
+
+	return sqrt(
+		pow((this->getCenter().x - entity.getCenter().x), 2) +
+		pow((this->getCenter().y - entity.getCenter().y), 2)
+	);
+}

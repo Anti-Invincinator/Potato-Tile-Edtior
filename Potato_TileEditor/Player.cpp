@@ -5,6 +5,7 @@
 void Player::initVariables()
 {
 	this->attacking = false;
+	this->sword = new Sword(20, "Resources/Images/Sprites/Player/sword.png");	
 }
 
 void Player::initComponents()
@@ -22,6 +23,11 @@ void Player::initAnimations()
 	this->animationComponent->addAnimation("ATTACK", 5.f, 0, 2, 1, 2, 64, 64);
 }
 
+void Player::initInventory()
+{
+	this->inventory = new Inventory(10);
+}
+
 //Constructor/Destructor
 Player::Player(float x, float y, sf::Texture& texture_sheet)
 {
@@ -35,17 +41,25 @@ Player::Player(float x, float y, sf::Texture& texture_sheet)
 
 	this->setPosition(x, y);
 	this->initAnimations();
+
+	this->initInventory();
 }
 
 Player::~Player()
 {
-
+	delete this->sword;
+	delete this->inventory;
 }
 
 //Accessors
 AttributeComponent* Player::getAttributeComponent()
 {
 	return this->attributeComponent;
+}
+
+Weapon* Player::getWeapon() const
+{
+	return this->sword;
 }
 
 //Functions
@@ -67,14 +81,6 @@ void Player::gainHP(const int hp)
 void Player::gainExp(const int exp)
 {
 	this->attributeComponent->gainExp(exp);
-}
-
-void Player::updateAttack()
-{
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-	{
-		//this->attacking = true;
-	}
 }
 
 void Player::updateAnimation(const float& dt)
@@ -121,13 +127,11 @@ void Player::Update(const float& dt, sf::Vector2f& mouse_pos_view)
 {
 	this->movementComponent->Update(dt);
 
-	this->updateAttack();
-
 	this->updateAnimation(dt);
 
 	this->hitboxComponent->Update();
 
-	this->sword.Update(mouse_pos_view, this->getCenter());
+	this->sword->Update(mouse_pos_view, this->getCenter());
 
 }
 
@@ -141,12 +145,12 @@ void Player::Render(sf::RenderTarget& target, sf::Shader* shader, const sf::Vect
 
 		shader->setUniform("hasTexture", true);
 		shader->setUniform("lightPos", light_position);
-		this->sword.Render(target, shader);
+		this->sword->Render(target, shader);
 	}
 	else
 	{
 		target.draw(this->sprite);
-		this->sword.Render(target);
+		this->sword->Render(target);
 	}
 
 	if(show_hitbox)

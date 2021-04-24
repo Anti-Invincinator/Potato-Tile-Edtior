@@ -1,15 +1,13 @@
 #ifndef TILEMAP_H
 #define TILEMAP_H
 
-#include "Entity.h"
+
 #include "EnemySpawnerTile.h"
 #include "RegularTile.h"
+#include "EnemySystem.h"
 
-
-class Entity;
 class EntitySpawner;
 class RegularTile;
-class Enemy;
 
 class TileMap
 {
@@ -59,7 +57,7 @@ public:
 
 	void updateWorldBoundsCollision(Entity* entity, const float& dt);
 	void updateTileCollision(Entity* entity, const float& dt);
-	void updateTiles(Entity* entity, const float& dt, std::vector<Enemy*>& activeEnemies);
+	void updateTiles(Entity* entity, const float& dt, EnemySystem& enemySystem);
 	void Update(Entity* entity, const float& dt);
 
 	void Render(sf::RenderTarget& target,

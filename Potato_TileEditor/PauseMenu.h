@@ -3,8 +3,6 @@
 
 #include "Gui.h"
 
-class Gui;
-
 class PauseMenu
 {
 private:

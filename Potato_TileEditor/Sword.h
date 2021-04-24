@@ -12,10 +12,12 @@ private:
 
 public:
     //CONSTRUCTOR / DESTRUCTOR
-    Sword();
+    Sword(unsigned value, std::string texture_file);
     virtual ~Sword();
 
     //FUNCTIONS
+    virtual Sword* clone();
+
     void Update(const sf::Vector2f& mouse_pos_view, const sf::Vector2f center);
     void Render(sf::RenderTarget& target, sf::Shader* shader = nullptr);
 };

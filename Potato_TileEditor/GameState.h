@@ -7,15 +7,7 @@
 #include "PlayerGUI.h"
 #include "Sword.h"
 #include "Bow.h"
-#include "Enemies_include.h"
-
-class State;
-class PauseMenu;
-class TileMap;
-class Player;
-class PlayerGUI;
-class Sword;
-class Bow;
+#include "TextTagSystem.h"
 
 class GameState : public State
 {
@@ -34,9 +26,13 @@ private :
 	PlayerGUI* playerGUI;
 	sf::Texture texture;
 
+	std::vector<Enemy*> activeEnemies;
+	EnemySystem* enemySystem;
+
 	TileMap* tileMap;
 
-	std::vector<Enemy*> activeEnemies;
+	//Systems
+	TextTagSystem *textTagSystem;
 
 	//Initializer Functions
 	void initDeferredRender();
@@ -46,9 +42,12 @@ private :
 	void initTextures();
 	void initPauseMenu();
 	void initShaders();
+	void initEnemySystem();
 	void initPlayer();
 	void initPlayerGUI();
 	void initTileMap();
+	void initSystems();
+
 
 public :
 	//CONSTRUCTOR / DESTRUCTOR
@@ -63,7 +62,8 @@ public :
 	void updatePausedMenuButtons();
 	void updateTileMap(const float& dt);
 	void updatePlayer(const float& dt);
-	void updateEnemies(const float& dt);
+	void updateCombatAndEnemies(const float& dt);
+	void updateCombat(Enemy* enemy, const int index, const float& dt);
 
 	void Update(const float& dt);
 	void Render(sf::RenderTarget* target = nullptr);

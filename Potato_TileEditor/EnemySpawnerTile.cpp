@@ -53,7 +53,7 @@ const bool& EnemySpawnerTile::getSpawned() const
 //Modifiers
 void EnemySpawnerTile::setSpawned(const bool spawned)
 {
-
+	this->spawned = spawned;
 }
 
 

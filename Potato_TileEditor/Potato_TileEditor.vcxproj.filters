@@ -34,17 +34,23 @@
     <Filter Include="Item">
       <UniqueIdentifier>{427fe177-a9cc-4dc0-a76a-dc493ddde71c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Item\Melee Weapon">
-      <UniqueIdentifier>{f2419fe9-1e19-4722-97fe-a739fb0f74b1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Item\Ranged Weapon">
-      <UniqueIdentifier>{ecfc4c9d-d5fd-46cf-89ee-ba2a6238e953}</UniqueIdentifier>
-    </Filter>
     <Filter Include="States\Editor Modes">
       <UniqueIdentifier>{0d2c5a57-574d-419c-95f8-6d80b0748a53}</UniqueIdentifier>
     </Filter>
     <Filter Include="Entities\Enemies">
       <UniqueIdentifier>{5ee902a9-d43a-4704-b7ed-d1ee60c2bcce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Item\Weapons">
+      <UniqueIdentifier>{f56140ad-4026-44f7-b3d5-a600ce9b3497}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Item\Weapons\Melee Weapon">
+      <UniqueIdentifier>{f2419fe9-1e19-4722-97fe-a739fb0f74b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Item\Weapons\Ranged Weapon">
+      <UniqueIdentifier>{ecfc4c9d-d5fd-46cf-89ee-ba2a6238e953}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Systems">
+      <UniqueIdentifier>{f5e9218b-f603-4339-b351-a683a476196d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -112,19 +118,19 @@
       <Filter>Item</Filter>
     </ClCompile>
     <ClCompile Include="MeleeWeapon.cpp">
-      <Filter>Item\Melee Weapon</Filter>
+      <Filter>Item\Weapons\Melee Weapon</Filter>
     </ClCompile>
     <ClCompile Include="Sword.cpp">
-      <Filter>Item\Melee Weapon</Filter>
+      <Filter>Item\Weapons\Melee Weapon</Filter>
     </ClCompile>
     <ClCompile Include="RangedWeapon.cpp">
-      <Filter>Item\Ranged Weapon</Filter>
+      <Filter>Item\Weapons\Ranged Weapon</Filter>
     </ClCompile>
     <ClCompile Include="SkillComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="Bow.cpp">
-      <Filter>Item\Ranged Weapon</Filter>
+      <Filter>Item\Weapons\Ranged Weapon</Filter>
     </ClCompile>
     <ClCompile Include="EnemySpawnerTile.cpp">
       <Filter>Tile</Filter>
@@ -146,6 +152,18 @@
     </ClCompile>
     <ClCompile Include="RegularTile.cpp">
       <Filter>Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemySystem.cpp">
+      <Filter>Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Inventory.cpp">
+      <Filter>Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon.cpp">
+      <Filter>Item\Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="TextTagSystem.cpp">
+      <Filter>Systems</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -210,19 +228,19 @@
       <Filter>Item</Filter>
     </ClInclude>
     <ClInclude Include="MeleeWeapon.h">
-      <Filter>Item\Melee Weapon</Filter>
+      <Filter>Item\Weapons\Melee Weapon</Filter>
     </ClInclude>
     <ClInclude Include="Sword.h">
-      <Filter>Item\Melee Weapon</Filter>
+      <Filter>Item\Weapons\Melee Weapon</Filter>
     </ClInclude>
     <ClInclude Include="RangedWeapon.h">
-      <Filter>Item\Ranged Weapon</Filter>
+      <Filter>Item\Weapons\Ranged Weapon</Filter>
     </ClInclude>
     <ClInclude Include="SkillComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Bow.h">
-      <Filter>Item\Ranged Weapon</Filter>
+      <Filter>Item\Weapons\Ranged Weapon</Filter>
     </ClInclude>
     <ClInclude Include="EnemySpawnerTile.h">
       <Filter>Tile</Filter>
@@ -245,11 +263,23 @@
     <ClInclude Include="Rat.h">
       <Filter>Entities\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="Enemies_include.h">
-      <Filter>Entities\Enemies</Filter>
-    </ClInclude>
     <ClInclude Include="RegularTile.h">
       <Filter>Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemySystem.h">
+      <Filter>Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Inventory.h">
+      <Filter>Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Items.h">
+      <Filter>Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon.h">
+      <Filter>Item\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="TextTagSystem.h">
+      <Filter>Systems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

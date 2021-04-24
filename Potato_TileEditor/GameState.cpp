@@ -69,9 +69,22 @@ void GameState::initTextures()
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_PLAYER_TEXTURE_SHEET";
 	}
 
-	if (!this->textures["RAT1_SHEET"].loadFromFile("Resources/Images/Sprites/Enemy/rat.png"))
+	//Loading Enemy Textures
+	if (!this->textures["RAT_SHEET"].loadFromFile("Resources/Images/Sprites/Enemy/rat.png"))
 	{
-		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_PLAYER_TEXTURE_SHEET";
+		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_RAT_TEXTURE_SHEET";
+	}
+	if (!this->textures["SLIME_SHEET"].loadFromFile("Resources/Images/Sprites/Enemy/blob.png"))
+	{
+		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_SLIME_TEXTURE_SHEET";
+	}
+	if (!this->textures["SCORPION_SHEET"].loadFromFile("Resources/Images/Sprites/Enemy/scorpion.png"))
+	{
+		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_SCORPION_TEXTURE_SHEET";
+	}
+	if (!this->textures["SPIDER_SHEET"].loadFromFile("Resources/Images/Sprites/Enemy/spider.png"))
+	{
+		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_SPIDER_TEXTURE_SHEET";
 	}
 }
 
@@ -92,6 +105,11 @@ void GameState::initShaders()
 	}
 }
 
+void GameState::initEnemySystem()
+{
+	this->enemySystem = new EnemySystem(this->activeEnemies, this->textures);
+}
+
 void GameState::initPlayer()
 {
 	this->player = new Player(220, 200, this->textures["PLAYER_SHEET"]);
@@ -105,6 +123,11 @@ void GameState::initPlayerGUI()
 void GameState::initTileMap()
 {
 	this->tileMap = new TileMap("text.pemp");
+}
+
+void GameState::initSystems()
+{
+	this->textTagSystem = new TextTagSystem("Fonts/Karantina-Bold.ttf");
 }
 
 //CONSTRUCTOR / DESTRUCTOR
@@ -121,8 +144,10 @@ GameState::GameState(StateData* state_data)
 
 	this->initPlayer();
 	this->initPlayerGUI();
+	this->initEnemySystem();
 	this->initTileMap();
 
+	this->initSystems();
 }
 
 GameState::~GameState()
@@ -130,12 +155,15 @@ GameState::~GameState()
 	delete this->player;
 	delete this->playerGUI;
 	delete this->pmenu;
+	delete this->enemySystem;
 	delete this->tileMap;
 
 	for (size_t i = 0; i < this->activeEnemies.size(); i++)
 	{
 		delete this->activeEnemies[i];
 	}
+
+	delete this->textTagSystem;
 }
 
 //Functions
@@ -204,6 +232,7 @@ void GameState::updatePlayerInput(const float& dt)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_DOWN"))))
 	{
 		this->player->Move(0.f, 1.f, dt);
+
 	}
 	
 }
@@ -223,23 +252,53 @@ void GameState::updateTileMap(const float& dt)
 {
 	this->tileMap->updateWorldBoundsCollision(this->player, dt);
 	this->tileMap->updateTileCollision(this->player, dt);
-	this->tileMap->updateTiles(this->player, dt);
-
-	for (auto* i : this->activeEnemies)
-	{
-		this->tileMap->updateWorldBoundsCollision(i, dt);
-		this->tileMap->updateTileCollision(i, dt);
-	}
+	this->tileMap->updateTiles(this->player, dt, *this->enemySystem);
 }
 
 void GameState::updatePlayer(const float& dt)
 {
 }
 
-void GameState::updateEnemies(const float& dt)
+void GameState::updateCombatAndEnemies(const float& dt)
 {
+	unsigned index = 0;
 
-	//this->activeEnemies.push_back(new Rat(600.f, 500.f, this->textures["RAT1_SHEET"]));
+	//Update all enemies
+	for (auto* enemy : this->activeEnemies)
+	{
+		enemy->Update(dt, this->mousePosView);
+		this->tileMap->updateWorldBoundsCollision(enemy, dt);
+		this->tileMap->updateTileCollision(enemy, dt);
+		this->updateCombat(enemy, index, dt);
+
+		//DANGEROUS
+		if(enemy->isDead())
+		{
+			this->player->gainExp(enemy->getGiveExp());
+			this->textTagSystem->addTextTag(DEFAULT_TAG, this->player->getCenter().x, this->player->getCenter().y, static_cast<int>(enemy->getGiveExp()));
+
+			this->activeEnemies.erase(this->activeEnemies.begin() + index);
+			index--;
+		}
+
+		++index;
+	}
+}
+
+void GameState::updateCombat(Enemy* enemy, const int index, const float& dt)
+{		
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	{
+		if (this->player->getWeapon()->getAttackTimer() &&
+			enemy->getGlobalBounds().contains(this->mousePosView) &&
+			enemy->getDistance(*this->player) < 30.f
+			)
+		{
+			int damage = static_cast<int>(this->player->getWeapon()->getDamageMin());
+			enemy->takeDamage(damage);
+			this->textTagSystem->addTextTag(DEFAULT_TAG, enemy->getCenter().x, enemy->getCenter().y, damage);
+		}
+	}
 }
 
 void GameState::Update(const float& dt)
@@ -260,10 +319,10 @@ void GameState::Update(const float& dt)
 
 		this->playerGUI->Update(dt);
 
-		for (auto *i : this->activeEnemies)
-		{
-			i->Update(dt, this->mousePosView);
-		}
+		this->updateCombatAndEnemies(dt);
+
+		//Update Systems
+		this->textTagSystem->Update(dt);
 	}
 	else  //Paused Update
 	{
@@ -296,6 +355,8 @@ void GameState::Render(sf::RenderTarget* target)
 	this->player->Render(this->renderTexture, &this->core_shader, this->player->getCenter(), false);
 
 	this->tileMap->renderDeferred(this->renderTexture, &this->core_shader, this->player->getCenter());
+
+	this->textTagSystem->Render(this->renderTexture);
 
 	//Render GUI
 	this->renderTexture.setView(this->renderTexture.getDefaultView());  //To Render it on Window and not on map

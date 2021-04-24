@@ -24,6 +24,7 @@ const float gui::p2pY(const float height_percent, const sf::VideoMode& vm)
 	*
 	* @return					float					the calculated pixel value.
 	*/
+
 	return std::floor(static_cast<float>(vm.height) * (height_percent / 100.f));
 }
 
@@ -37,7 +38,6 @@ const unsigned gui::p2fontSize(const sf::VideoMode& vm, const unsigned font_size
 	*
 	* @return					unsigned						the calculated character size value.
 	*/
-	
 
 	return static_cast<unsigned>((vm.width + vm.height) / font_size_modifier);
 }
@@ -431,13 +431,13 @@ gui::ProgressBar::ProgressBar(float pos_x, float pos_y, float _width, float _hei
 	this->maxValue = max_value;
 
 	this->back.setSize(sf::Vector2f(this->maxWidth, height));
-	this->back.setFillColor(inner_color);
+	this->back.setFillColor(sf::Color(20, 20, 20, 200));
 	this->back.setOutlineThickness(1.f);
 	this->back.setOutlineColor(sf::Color::White);
 	this->back.setPosition(x, y);
 
-	this->bar.setSize(sf::Vector2f(width, height));
-	this->bar.setFillColor(sf::Color(250, 20, 20, 200));
+	this->bar.setSize(sf::Vector2f(0, height));
+	this->bar.setFillColor(inner_color);
 	this->bar.setPosition(x, y);
 
 	if (font)
@@ -471,7 +471,8 @@ void gui::ProgressBar::Update(const int current_value)
 
 void gui::ProgressBar::Render(sf::RenderTarget& target)
 {
-	target.draw(this->bar);
 	target.draw(this->back);
+	target.draw(this->bar);
+	
 	target.draw(this->text);
 }
