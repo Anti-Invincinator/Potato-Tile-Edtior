@@ -1,8 +1,7 @@
 #ifndef PLAYERGUI_H
 #define PLAYERGUI_H
 
-#include "Player.h"
-#include "Gui.h"
+#include "PlayerGUITab.h"
 
 class PlayerGUI
 {
@@ -24,24 +23,39 @@ private :
 	//HP Bar
 	gui::ProgressBar* hpBar;
 
+	//Tabs
+	PlayerGUITab* playerTabs;
+
 	//Initializer Functions
 	void initFont();
 	void initLevelBar();
 	void initHPBar();
 	void initEXPBar();
+	void initPlayerTab(sf::VideoMode& vm, sf::Font font, Player& player);
+
 
 public:
 	//Constructor / Destructor
 	PlayerGUI(Player* player, sf::VideoMode& vm);
 	~PlayerGUI();
 
+	//Accessors
+	const bool getTabsOpen() const;
+	void toggleCharacterTab();
+
 	//Functions
+
+	//HUD
 	void updateHPBar();
 	void renderHPBar(sf::RenderTarget& target);
 	void updateEXPBar();
 	void renderEXPBar(sf::RenderTarget& target);
 	void updateLevelBar();
 	void renderLevelBar(sf::RenderTarget& target);
+
+
+	void updatePlayerTabs();
+	void renderPlayerTabs(sf::RenderTarget& target);
 
 	void Update(const float& dt);
 	void Render(sf::RenderTarget& target);

@@ -2,8 +2,8 @@
 #include "Sword.h"
 
 //CONSTRUCTOR / DESTRUCTOR
-Sword::Sword(unsigned value, std::string texture_file)
-	:MeleeWeapon(value, texture_file)
+Sword::Sword(unsigned level, unsigned value, std::string texture_file, unsigned damage_min, unsigned damage_max, unsigned range)
+	:MeleeWeapon(level, value, texture_file, damage_min, damage_max, range)
 {
 	this->weapon_sprite.setOrigin(
 		this->weapon_sprite.getGlobalBounds().width / 2.f,
@@ -33,7 +33,15 @@ void Sword::Update(const sf::Vector2f& mouse_pos_view, const sf::Vector2f center
 
 	float deg = atan2(dY, dX) * 180.f / PI;
 
-	this->weapon_sprite.setRotation(deg + 90.f);
+	if (this->attackTimer.getElapsedTime().asMilliseconds() < this->attackTimerMax / 4)
+	{
+		float len = sqrt(pow(dX, 2) + pow(dY, 2));
+		sf::Vector2f normVec(dX / len, dY / len);
+
+		this->weapon_sprite.setPosition(center.x + normVec.x * 10.f, center.y + normVec.y * 10.f);
+	}
+	else
+		this->weapon_sprite.setRotation(deg + 90.f);
 }
 
 void Sword::Render(sf::RenderTarget& target, sf::Shader* shader)

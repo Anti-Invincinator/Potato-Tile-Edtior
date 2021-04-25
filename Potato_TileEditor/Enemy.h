@@ -4,16 +4,15 @@
 #include "Entity.h"
 #include "EnemySpawnerTile.h"
 
-class Entity;
-class EnemySpawnerTile;
-
 class Enemy :
     public Entity
 {
-private:
+protected:
     //Variables
-    //EnemySpawner& enemySpawner;
+    EnemySpawnerTile& enemySpawnerTile;
     unsigned giveExp;
+    sf::Clock damageTimer;
+    sf::Int32 damageTimerMax;
 
     //Initializer Functions
     virtual void initVariables() = 0;
@@ -21,14 +20,21 @@ private:
 
 public:
     //Constructor / Destructor
-    Enemy();
+    Enemy(EnemySpawnerTile& enemy_spawner_tile);
     virtual ~Enemy();
 
     //Accessors
     virtual const AttributeComponent* getAttributeComponent();
     const unsigned& getGiveExp();
+    EnemySpawnerTile& getEnemySpawnerTile();
+    const bool getDamageTimerDone() const;
+
+    //Modifiers
+    void resetDamageTimer();
 
     //Functions
+    virtual void generateAttributes(const unsigned level);
+
     virtual void takeDamage(const int damage);
     virtual const bool isDead() const;
 

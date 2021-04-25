@@ -8,7 +8,10 @@ void TextTagSystem::initVariables()
 
 void TextTagSystem::initTagTemplates()
 {
-	this->tagTemplates[DEFAULT_TAG] = new TextTag(this->font, "1sadas1", 600.f, 600.f, 0.f, -1.f, sf::Color::White, 15, 10.f, 200.f);
+	this->tagTemplates[DEFAULT_TAG] = new TextTag(this->font, "", 600.f, 600.f, 0.f, -1.f, sf::Color::White, 10, 100.f, 200.f, 50.f, 2);
+	this->tagTemplates[NEGATIVE_TAG] = new TextTag(this->font, "", 600.f, 600.f, 0.f, 1.f, sf::Color::Red, 20, 100.f, 250.f, 50.f, 2);
+	this->tagTemplates[POSITIVE_TAG] = new TextTag(this->font, "", 600.f, 600.f, 0.f, -1.f, sf::Color::Green, 20, 100.f, 250.f, 50.f, 2);
+	this->tagTemplates[EXPERIENCE_TAG] = new TextTag(this->font, "", 600.f, 600.f, 0.f, -1.f, sf::Color::Cyan, 30, 150.f, 200.f, 50.f, 2);
 }
 
 void TextTagSystem::initFont(std::string font_file)
@@ -45,27 +48,31 @@ TextTagSystem::~TextTagSystem()
 
 
 //Functions
-void TextTagSystem::addTextTag(const unsigned tag_type, const float pos_x, const float pos_y, const std::string string)
-{
-	this->tags.push_back(new TextTag(this->tagTemplates[DEFAULT_TAG], pos_x, pos_y, string));
-}
-
-void TextTagSystem::addTextTag(const unsigned tag_type, const float pos_x, const float pos_y, const int i)
+void TextTagSystem::addTextTag(const unsigned tag_type, const float pos_x, const float pos_y, const std::string str, const std::string prefix, const std::string postfix)
 {
 	std::stringstream ss;
 
-	ss << i;
+	ss << prefix << str << " " << postfix;
 
-	this->tags.push_back(new TextTag(this->tagTemplates[DEFAULT_TAG], pos_x, pos_y, ss.str()));
+	this->tags.push_back(new TextTag(this->tagTemplates[tag_type], pos_x, pos_y, ss.str()));
 }
 
-void TextTagSystem::addTextTag(const unsigned tag_type, const float pos_x, const float pos_y, const float f)
+void TextTagSystem::addTextTag(const unsigned tag_type, const float pos_x, const float pos_y, const int i, const std::string prefix, const std::string postfix)
 {
 	std::stringstream ss;
 
-	ss << f;
+	ss << prefix << i <<" "<<postfix;
 
-	this->tags.push_back(new TextTag(this->tagTemplates[DEFAULT_TAG], pos_x, pos_y, ss.str()));
+	this->tags.push_back(new TextTag(this->tagTemplates[tag_type], pos_x, pos_y, ss.str()));
+}
+
+void TextTagSystem::addTextTag(const unsigned tag_type, const float pos_x, const float pos_y, const float f, const std::string prefix, const std::string postfix)
+{
+	std::stringstream ss;
+
+	ss << prefix << f << " " << postfix;
+
+	this->tags.push_back(new TextTag(this->tagTemplates[tag_type], pos_x, pos_y, ss.str()));
 }
 
 void TextTagSystem::Update(const float& dt)

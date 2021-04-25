@@ -17,23 +17,42 @@ void Rat::initAnimations()
 	this->animationComponent->addAnimation("ATTACK", 5.f, 0, 2, 1, 2, 60, 64);
 }
 
+void Rat::initAI()
+{
+
+}
+
+void Rat::initGui()
+{
+	this->hpbar.setFillColor(sf::Color::Red);
+	this->hpbar.setSize(sf::Vector2f(100.f, 20.f));
+	this->hpbar.setPosition(sf::Vector2f(this->sprite.getPosition()));
+}
+
 //Constructor / Destructor
 
-Rat::Rat(float x, float y, sf::Texture& texture_sheet)
+Rat::Rat(float x, float y, sf::Texture& texture_sheet, EnemySpawnerTile& enemy_spawner_tile, Entity& player)
+	:Enemy(enemy_spawner_tile)
 {
 	this->initVariables();
+	this->initGui();
 
 	this->createHitboxComponent(this->sprite, 13.f, 39.f, 30.f, 30.f);
 	this->createMovementComponent(50.f, 1600.f, 1000.f);
 	this->createAnimationComponent(texture_sheet);
 	this->createAttributeComponent(1);
 
+	this->generateAttributes(this->attributeComponent->level);
+
 	this->setPosition(x, y);
 	this->initAnimations();
+
+	this->follow = new AIFollow(*this, player);
 }
 
 Rat::~Rat()
 {
+	delete this->follow;
 }
 
 void Rat::takeDamage(const int damage)
@@ -68,9 +87,20 @@ void Rat::updateAnimation(const float& dt)
 	{
 		this->animationComponent->Play("WALK_DOWN", dt, this->movementComponent->getVelocity().y, this->movementComponent->getMaxVelocity());
 	}
+
+	if (this->damageTimer.getElapsedTime().asMilliseconds() <= this->damageTimerMax)
+	{
+		this->sprite.setColor(sf::Color::Red);
+	}
+	else
+		this->sprite.setColor(sf::Color::White);
 }
 void Rat::Update(const float& dt, sf::Vector2f& mouse_pos_view)
 {
+	//UpdateGUI REMOVE
+	this->hpbar.setSize(sf::Vector2f(100.f * (static_cast<float>(this->attributeComponent->hitpoints) / this->attributeComponent->hitpointsMax), 20.f));
+	this->hpbar.setPosition(this->sprite.getPosition());
+
 	this->movementComponent->Update(dt);
 
 	//this->updateAttack();
@@ -78,6 +108,8 @@ void Rat::Update(const float& dt, sf::Vector2f& mouse_pos_view)
 	this->updateAnimation(dt);
 
 	this->hitboxComponent->Update();
+
+	this->follow->Update(dt);
 
 }
 
@@ -93,6 +125,8 @@ void Rat::Render(sf::RenderTarget& target, sf::Shader* shader, const sf::Vector2
 	{
 		target.draw(this->sprite);
 	}
+
+	target.draw(this->hpbar);
 
 	if (show_hitbox)
 		this->hitboxComponent->Render(target);

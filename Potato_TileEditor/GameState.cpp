@@ -24,8 +24,8 @@ void GameState::initView()
 {
 	this->view.setSize(
 		sf::Vector2f(
-		static_cast<float>(this->stateData->gfxSettings->resolution.width),
-		static_cast<float>(this->stateData->gfxSettings->resolution.height)
+		static_cast<float>(this->stateData->gfxSettings->resolution.width) / 1.25f,
+		static_cast<float>(this->stateData->gfxSettings->resolution.height) / 1.25f
 		)
 	);
 
@@ -105,9 +105,15 @@ void GameState::initShaders()
 	}
 }
 
+void GameState::initKeyTimer()
+{
+	this->keyTimeMax = 400.f;
+	this->keyTimer.restart();
+}
+
 void GameState::initEnemySystem()
 {
-	this->enemySystem = new EnemySystem(this->activeEnemies, this->textures);
+	this->enemySystem = new EnemySystem(this->activeEnemies, this->textures, *this->player);
 }
 
 void GameState::initPlayer()
@@ -141,7 +147,7 @@ GameState::GameState(StateData* state_data)
 	this->initTextures();
 	this->initPauseMenu();
 	this->initShaders();
-
+	this->initKeyTimer();
 	this->initPlayer();
 	this->initPlayerGUI();
 	this->initEnemySystem();
@@ -166,13 +172,26 @@ GameState::~GameState()
 	delete this->textTagSystem;
 }
 
+//Accessors
+const bool GameState::getKeytime()
+{
+	if (this->keyTimer.getElapsedTime().asMilliseconds() >= this->keyTimeMax)
+	{
+		this->keyTimer.restart();
+		return true;
+	}
+
+	return false;
+}
+
 //Functions
 void GameState::updateView(const float& dt)
 {
-	this->view.setCenter(
-		std::floor(this->player->getPosition().x + (static_cast<float>(this->mousePosWindow.x) - static_cast<float>(this->stateData->gfxSettings->resolution.width / 2)) / 10.f),
-		std::floor(this->player->getPosition().y + (static_cast<float>(this->mousePosWindow.y) - static_cast<float>(this->stateData->gfxSettings->resolution.height / 2)) / 10.f)
-	);
+		this->view.setCenter(
+			std::floor(this->player->getPosition().x + (static_cast<float>(this->mousePosWindow.x) - static_cast<float>(this->stateData->gfxSettings->resolution.width / 2)) / 10.f),
+			std::floor(this->player->getPosition().y + (static_cast<float>(this->mousePosWindow.y) - static_cast<float>(this->stateData->gfxSettings->resolution.height / 2)) / 10.f)
+		);
+
 
 	if (this->tileMap->getMaxSizeGridF().x >= this->view.getSize().x)
 	{
@@ -240,6 +259,11 @@ void GameState::updatePlayerInput(const float& dt)
 void GameState::updatePlayerGUI(const float& dt)
 {
 	this->playerGUI->Update(dt);
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("TOGGLE_PLAYER_TAB"))) && this->getKeytime())
+	{
+		this->playerGUI->toggleCharacterTab(); 
+	}
 }
 
 void GameState::updatePausedMenuButtons()
@@ -257,47 +281,53 @@ void GameState::updateTileMap(const float& dt)
 
 void GameState::updatePlayer(const float& dt)
 {
+	this->player->Update(dt, this->mousePosView);
 }
 
 void GameState::updateCombatAndEnemies(const float& dt)
 {
-	unsigned index = 0;
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && this->player->getWeapon()->getAttackTimer())
+		this->player->setInitAttack(true);
 
+	unsigned index = 0;
 	//Update all enemies
 	for (auto* enemy : this->activeEnemies)
 	{
 		enemy->Update(dt, this->mousePosView);
+
 		this->tileMap->updateWorldBoundsCollision(enemy, dt);
 		this->tileMap->updateTileCollision(enemy, dt);
-		this->updateCombat(enemy, index, dt);
+
+		if(this->player->getInitAttack())
+			this->updateCombat(enemy, index, dt);
 
 		//DANGEROUS
 		if(enemy->isDead())
 		{
 			this->player->gainExp(enemy->getGiveExp());
-			this->textTagSystem->addTextTag(DEFAULT_TAG, this->player->getCenter().x, this->player->getCenter().y, static_cast<int>(enemy->getGiveExp()));
+			this->textTagSystem->addTextTag(EXPERIENCE_TAG, this->player->getCenter().x, this->player->getCenter().y, static_cast<int>(enemy->getGiveExp()), "+", "EXP");
 
-			this->activeEnemies.erase(this->activeEnemies.begin() + index);
-			index--;
+			this->enemySystem->removeEnemy(index);
+
+			--index;
 		}
 
 		++index;
 	}
+
+	this->player->setInitAttack(false);
 }
 
 void GameState::updateCombat(Enemy* enemy, const int index, const float& dt)
 {		
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-	{
-		if (this->player->getWeapon()->getAttackTimer() &&
-			enemy->getGlobalBounds().contains(this->mousePosView) &&
-			enemy->getDistance(*this->player) < 30.f
-			)
-		{
-			int damage = static_cast<int>(this->player->getWeapon()->getDamageMin());
-			enemy->takeDamage(damage);
-			this->textTagSystem->addTextTag(DEFAULT_TAG, enemy->getCenter().x, enemy->getCenter().y, damage);
-		}
+	if ( enemy->getGlobalBounds().contains(this->mousePosView) &&
+		enemy->getDistance(*this->player) < this->player->getWeapon()->getRange() &&
+		enemy->getDamageTimerDone())
+	{	
+		int damage = static_cast<int>(this->player->getWeapon()->getDamage());
+		enemy->takeDamage(damage);
+		enemy->resetDamageTimer();
+		this->textTagSystem->addTextTag(NEGATIVE_TAG, enemy->getCenter().x, enemy->getCenter().y, damage, "-");	
 	}
 }
 
@@ -315,11 +345,11 @@ void GameState::Update(const float& dt)
 
 		this->updateTileMap(dt);
 
-		this->player->Update(dt, this->mousePosView);
-
-		this->playerGUI->Update(dt);
-
 		this->updateCombatAndEnemies(dt);
+
+		this->updatePlayer(dt);
+
+		this->updatePlayerGUI(dt);
 
 		//Update Systems
 		this->textTagSystem->Update(dt);

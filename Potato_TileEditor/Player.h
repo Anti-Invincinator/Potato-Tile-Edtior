@@ -12,6 +12,7 @@ private:
     //Variables
     Inventory* inventory;
 
+    bool initAttack;
     bool attacking;
     Sword* sword;
 
@@ -19,6 +20,7 @@ private:
     void initVariables();
     void initComponents();
     void initAnimations();
+    void initAttributes();
     void initInventory();
 
 public:
@@ -28,6 +30,11 @@ public:
     //Accessors
     AttributeComponent* getAttributeComponent();
     Weapon* getWeapon() const;
+    const bool& getInitAttack() const;
+    const std::string toStringCharacterTab() const;
+
+    //Modifiers
+    void setInitAttack(const bool initAttack);
 
     //Functions
     void loseHP(const int hp);

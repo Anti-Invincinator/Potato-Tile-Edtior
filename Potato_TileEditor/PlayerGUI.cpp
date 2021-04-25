@@ -35,6 +35,11 @@ void PlayerGUI::initEXPBar()
 	this->expBar = new gui::ProgressBar(1.f, 5.6f, 10.4f, 1.9f, this->player->getAttributeComponent()->expNext, sf::Color::Blue, 140, this->vm, &this->font);
 }
 
+void PlayerGUI::initPlayerTab(sf::VideoMode& vm, sf::Font font, Player& player)
+{
+	this->playerTabs = new PlayerGUITab(vm, font, player);
+}
+
 //Constructor / Destructor
 PlayerGUI::PlayerGUI(Player* player, sf::VideoMode& vm)
 	: vm(vm)
@@ -45,13 +50,28 @@ PlayerGUI::PlayerGUI(Player* player, sf::VideoMode& vm)
 	this->initHPBar();
 	this->initEXPBar();
 	this->initLevelBar();
+
+	//Tabs
+	this->initPlayerTab(vm , this->font, *player);
 }
 
 PlayerGUI::~PlayerGUI()
 {
 	delete this->hpBar;
 	delete this->expBar;
+	delete this->playerTabs;
 }
+
+const bool PlayerGUI::getTabsOpen() const
+{
+	return this->playerTabs->isTabOpen();
+}
+
+void PlayerGUI::toggleCharacterTab()
+{
+	this->playerTabs->toggleCharacterTab();
+}
+
 
 //Functions
 void PlayerGUI::updateHPBar()
@@ -86,11 +106,22 @@ void PlayerGUI::renderLevelBar(sf::RenderTarget& target)
 	target.draw(this->levelBarText);
 }
 
+void PlayerGUI::updatePlayerTabs()
+{
+	this->playerTabs->Update();
+}
+
+void PlayerGUI::renderPlayerTabs(sf::RenderTarget& target)
+{
+	this->playerTabs->Render(target);
+}
+
 void PlayerGUI::Update(const float& dt)
 {
 	this->updateEXPBar();
 	this->updateHPBar();
 	this->updateLevelBar();
+	this->updatePlayerTabs();
 }
 
 void PlayerGUI::Render(sf::RenderTarget& target)
@@ -98,4 +129,5 @@ void PlayerGUI::Render(sf::RenderTarget& target)
 	this->renderEXPBar(target);
 	this->renderHPBar(target);
 	this->renderLevelBar(target);
+	this->renderPlayerTabs(target);
 }

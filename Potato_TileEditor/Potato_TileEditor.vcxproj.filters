@@ -52,6 +52,15 @@
     <Filter Include="Systems">
       <UniqueIdentifier>{f5e9218b-f603-4339-b351-a683a476196d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GUI\PlayerGUITabs">
+      <UniqueIdentifier>{6b7e1bd4-dc2a-4df9-b24b-c931e816364a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AI">
+      <UniqueIdentifier>{2df0221a-5690-4b0f-9a82-65f9dea5742e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AI\Options">
+      <UniqueIdentifier>{feb95fbf-4bb8-41a6-8358-4ef4aff0c89f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -165,6 +174,24 @@
     <ClCompile Include="TextTagSystem.cpp">
       <Filter>Systems</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerGUITab.cpp">
+      <Filter>GUI\PlayerGUITabs</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterTab.cpp">
+      <Filter>GUI\PlayerGUITabs</Filter>
+    </ClCompile>
+    <ClCompile Include="Tab.cpp">
+      <Filter>GUI\PlayerGUITabs</Filter>
+    </ClCompile>
+    <ClCompile Include="AIOption.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="AIFollow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AIComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -220,9 +247,6 @@
     </ClInclude>
     <ClInclude Include="AttributeComponent.h">
       <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerGUI.h">
-      <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="Item.h">
       <Filter>Item</Filter>
@@ -280,6 +304,27 @@
     </ClInclude>
     <ClInclude Include="TextTagSystem.h">
       <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerGUI.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerGUITab.h">
+      <Filter>GUI\PlayerGUITabs</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterTab.h">
+      <Filter>GUI\PlayerGUITabs</Filter>
+    </ClInclude>
+    <ClInclude Include="Tab.h">
+      <Filter>GUI\PlayerGUITabs</Filter>
+    </ClInclude>
+    <ClInclude Include="AIOption.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="AIFollow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AIComponent.h">
+      <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -529,16 +529,18 @@ void TileMap::updateTiles(Entity* entity, const float& dt, EnemySystem& enemySys
 		{
 			for (size_t k = 0; k < this->map[x][y][this->layer].size(); k++)
 			{
+				//Update the tile
 				this->map[x][y][this->layer][k]->Update();
 
+				//Update tile types (specific)
 				if (this->map[x][y][this->layer][k]->getType() == TileTypes::ENEMYSPAWNER)
 				{
-					EnemySpawnerTile* es = dynamic_cast<EnemySpawnerTile*>(this->map[x][y][this->layer][k]);
+					EnemySpawnerTile* es = dynamic_cast<EnemySpawnerTile*>(this->map[x][y][this->layer][k]);     //!!HAS TO BE POINTER TO BE ABLE TO DYNAMIC CAST
 					if (es)
 					{
-						if (!es->getSpawned())
+						if (!es->getSpawned() && es->getEnemyCounter() < es->getEnemyAmount())
 						{
-							enemySystem.createEnemy(RAT, x * this->gridSizeF, y * this->gridSizeF);
+							enemySystem.createEnemy(RAT, x * this->gridSizeF, y * this->gridSizeF, *es);
 							es->setSpawned(true);
 						}	
 					}

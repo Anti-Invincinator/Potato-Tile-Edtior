@@ -57,6 +57,10 @@ void Entity::createSkillComponent()
 	this->skillComponent = new SkillComponent();
 }
 
+void Entity::createAIComponent()
+{
+}
+
 const sf::Vector2f& Entity::getPosition() const
 {
 	if (this->hitboxComponent)
@@ -153,10 +157,11 @@ void Entity::stopVelocityY()
 //Calculations
 const float Entity::getDistance(const Entity& entity) const
 {
-	//sqrt((x2 - x1) ^ 2 + (x2 - x1) ^ 2 )
+	//formula : sqrt((x2 - x1) ^ 2 + (x2 - x1) ^ 2 )
 
 	return sqrt(
 		pow((this->getCenter().x - entity.getCenter().x), 2) +
 		pow((this->getCenter().y - entity.getCenter().y), 2)
 	);
 }
+ 

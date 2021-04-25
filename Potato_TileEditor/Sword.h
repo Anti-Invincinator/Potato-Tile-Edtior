@@ -12,7 +12,7 @@ private:
 
 public:
     //CONSTRUCTOR / DESTRUCTOR
-    Sword(unsigned value, std::string texture_file);
+    Sword(unsigned level, unsigned value, std::string texture_file, unsigned damage_min, unsigned damage_max, unsigned range);
     virtual ~Sword();
 
     //FUNCTIONS

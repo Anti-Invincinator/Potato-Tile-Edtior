@@ -7,10 +7,11 @@ void Item::initVariables()
 }
 
 //CONSTRUCTOR / DESTRUCTOR
-Item::Item(unsigned value)
+Item::Item(unsigned level, unsigned value)
 {
 	this->initVariables();
 
+	this->level = level;
 	this->value = value;
 	this->type = ItemTypes::DEFAULT_ITEM;
 }

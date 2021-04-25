@@ -22,6 +22,9 @@ private :
 
 	sf::Shader core_shader;
 
+	sf::Clock keyTimer;
+	float keyTimeMax;
+
 	Player* player;
 	PlayerGUI* playerGUI;
 	sf::Texture texture;
@@ -42,6 +45,7 @@ private :
 	void initTextures();
 	void initPauseMenu();
 	void initShaders();
+	void initKeyTimer();
 	void initEnemySystem();
 	void initPlayer();
 	void initPlayerGUI();
@@ -53,6 +57,9 @@ public :
 	//CONSTRUCTOR / DESTRUCTOR
 	GameState(StateData* state_data);
 	virtual ~GameState();
+
+	//Accessors
+	const bool getKeytime();
 
 	//Functions
 	void updateView(const float& dt);

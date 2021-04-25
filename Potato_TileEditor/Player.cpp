@@ -4,8 +4,10 @@
 //Initializer functions
 void Player::initVariables()
 {
+	this->initAttack = false;
 	this->attacking = false;
-	this->sword = new Sword(20, "Resources/Images/Sprites/Player/sword.png");	
+	this->sword = new Sword(1,20, "Resources/Images/Sprites/Player/sword.png", 2, 5, 60);	
+	this->sword->generate(1, 3);
 }
 
 void Player::initComponents()
@@ -23,6 +25,16 @@ void Player::initAnimations()
 	this->animationComponent->addAnimation("ATTACK", 5.f, 0, 2, 1, 2, 64, 64);
 }
 
+void Player::initAttributes()
+{
+	this->attributeComponent->vitality 	=  2;
+	this->attributeComponent->strength	=  4;
+	this->attributeComponent->dexterity	=  1;
+	this->attributeComponent->agility	=  1;
+	this->attributeComponent->intelligence	=  1;
+	this->attributeComponent->luck	=  1;
+}
+
 void Player::initInventory()
 {
 	this->inventory = new Inventory(10);
@@ -34,13 +46,14 @@ Player::Player(float x, float y, sf::Texture& texture_sheet)
 	this->initVariables();
 
 	this->createHitboxComponent(this->sprite, 12.f, 10.f, 40.f, 54.f);
-	this->createMovementComponent(200.f, 1600.f, 1000.f);
+	this->createMovementComponent(160.f, 1300.f, 1000.f);
 	this->createAnimationComponent(texture_sheet);
 	this->createAttributeComponent(1);
 	this->createSkillComponent();
 
 	this->setPosition(x, y);
 	this->initAnimations();
+	this->initAttributes();
 
 	this->initInventory();
 }
@@ -60,6 +73,32 @@ AttributeComponent* Player::getAttributeComponent()
 Weapon* Player::getWeapon() const
 {
 	return this->sword;
+}
+
+const bool& Player::getInitAttack() const
+{
+	return this->initAttack;
+}
+
+const std::string Player::toStringCharacterTab() const
+{
+	std::stringstream ss;
+
+	AttributeComponent* ac = this->attributeComponent;
+
+	ss << "Vitality : " << ac->vitality << "\n"
+		<< "Strength : " << ac->strength << "\n"
+		<< "Dexterity : " << ac->dexterity << "\n"
+		<< "Agility : " << ac->agility << "\n"
+		<< "Intelligence : " << ac->intelligence << "\n"
+		<< "Luck: " << ac->luck << "\n";
+
+	return ss.str();
+}
+
+void Player::setInitAttack(const bool initAttack)
+{
+	this->initAttack = initAttack;
 }
 
 //Functions
